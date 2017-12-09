@@ -1,0 +1,26 @@
+{
+ "expo": {
+  "name": "mustr.",
+  "slug": "mustr.",
+  "version": "0.0.1",
+  "privacy": "public",
+  // ADD THESE LATER: 
+  // "icon": "./assets/app-icon.png",
+  // "splash": {
+    // "image": "./assets/splash.png",
+  //   "resizeMode": "contain",
+  //   "backgroundColor": "#ffffff"
+  // },
+  "orientation": "portrait",
+  "primaryColor": "#cccccc",
+  "sdkVersion": "23.0.0",
+  "ios": {
+    "supportsTablet": true, // may need to change this. 
+    "bundleIdentifier": "com.mustr.Muster-Native" // firebase references this. DO NOT CHANGE.
+  },
+  "android": {
+    "package": "com.mustr.Muster-Native"
+  }
+
+ }
+}

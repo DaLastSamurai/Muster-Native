@@ -1,0 +1,25 @@
+To get started, you will need to download the Expo XDE.
+After that, on the main page select 'Open Project' and select 'Muster-Native'
+After that, you can open on a simulated device (top right corner), or download
+  the expo app on your iPhone, and scan the QR code you generate by clicking the 
+  share button (top left) on the desktop app. 
+
+note: for the on desktop iphone simulator, if you don't have a sohee level comp, 
+  you def want to use the iphone 6 or lower for your simulations. 
+
+If you are having trouble setting up the env, talk to seamus. 
+
+
+STRUCTURE: 
+
+Each folder (besides the persistentComponents) is a different page of the app. 
+  These are conditionally rendered from the app.js. 
+  The entry point (where data gets passed in from app.js) for each page is the 
+  **componentName**Screen.js file. At the top of this component there are maps 
+  of which components are subordinate to which components. 
+
+
+
+DON'T TOUCH UNDER ANY CIRCUMSTANCES: 
+  app.json
+  
