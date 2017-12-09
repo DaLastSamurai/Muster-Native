@@ -17,23 +17,25 @@ export default class Login extends React.Component {
       pw : "", 
       resettingPW: false, 
     }; 
-    // this.handleGoogleSubmit = this.handleGoogleSubmit.bind(this)
-    // this.handleEmailSubmit = this.handleEmailSubmit.bind(this)
+    this.handleGoogleSubmit = this.handleGoogleSubmit.bind(this)
+    this.handleEmailSubmit = this.handleEmailSubmit.bind(this)
   }
 
   handleGoogleSubmit(e) {
+    let loginThis = this
     e.preventDefault(); 
     firebaseAuth().signInWithRedirect(provider)
       .catch(function(error) {
-        this.setState({error: error.toString()})
+        loginThis.setState({error: error.toString()})
       });
   }
 
   handleEmailSubmit(e) {
+    let loginThis = this
     e.preventDefault(); 
     firebaseAuth()
-      .signInWithEmailAndPassword(this.state.email.value, this.state.pw.value)
-      .catch(error => this.setState({error: error.toString()}))
+      .signInWithEmailAndPassword(loginThis.state.email.value, loginThisspmsp.state.pw.value)
+      .catch(error => loginThis.setState({error: error.toString()}))
   }
 
   render() {
