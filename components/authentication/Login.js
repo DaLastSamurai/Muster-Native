@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import firebase from 'firebase'
+import axios from 'axios'
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 import { firebaseAuth, users} from '../../config/firebase/firebaseCredentials';
 import { provider } from '../../config/firebase/firebaseAuthCredentials';
@@ -31,11 +32,21 @@ export default class Login extends React.Component {
   }
 
   handleEmailSubmit(e) {
-    let loginThis = this
     e.preventDefault(); 
-    firebaseAuth()
-      .signInWithEmailAndPassword(loginThis.state.email.value, loginThisspmsp.state.pw.value)
-      .catch(error => loginThis.setState({error: error.toString()}))
+    axios.post('http://localhost:1337/auth/login/email', {
+      "username" : this.state.email, 
+      "password" : this.state.pw
+    })
+    .then(res => {
+      if (res.data.error) { this.setState({error : res.data.error}) }
+      else {
+        let userObj = res.data
+        // this is sent down from app through authScreen. It sets state in App, 
+        // which in turn calls checkAuthStatus from authHelpers.  
+        this.props.sendUserInfoToApp(userObj.currentUser)
+      }
+    }) 
+    
   }
 
   render() {
@@ -72,7 +83,7 @@ export default class Login extends React.Component {
 
         <LinkButton 
           title='Login' 
-          clickFunction={this.handleGoogleSubmit} 
+          clickFunction={this.handleEmailSubmit} 
         />
         <Text> {this.state.error} </Text> 
         

@@ -44,7 +44,10 @@ export default class AuthScreen extends React.Component {
     return this.state.isSigningUp 
     ? (
       <View> 
-        <Signup loadLoginPage = {this.loadLoginPage}/>
+        <Signup 
+          loadLoginPage = {this.loadLoginPage}
+          sendUserInfoToApp = {this.props.sendUserInfoToApp}
+        />
       </View> 
       ) 
     : (
@@ -52,6 +55,7 @@ export default class AuthScreen extends React.Component {
         <Login 
           user = {this.props.user} 
           loadSignupPage = {this.loadSignupPage}
+          sendUserInfoToApp = {this.props.sendUserInfoToApp}
         />
       </View>
       )

@@ -1,8 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import firebase from 'firebase'
+import axios from 'axios'
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
-import { firebaseAuth, users} from '../../config/firebase/firebaseCredentials';
+// import { firebaseAuth, users} from '../../config/firebase/firebaseCredentials';
 import { provider } from '../../config/firebase/firebaseAuthCredentials';
 import LinkButton from '../helperComponents/LinkButton'
 
@@ -19,19 +20,30 @@ export default class Signup extends React.Component {
   }
 
   handleGoogleSubmit(e) {
-    var dat = this
+    console.log('that is getting run')
+    // var dat = this
     e.preventDefault(); 
-    firebaseAuth().signInWithRedirect(provider)
-      .catch(function(error) {
-        dat.setState({error: error.toString()})
-      });
+    // firebaseAuth().signInWithRedirect(provider)
+    //   .catch(function(error) {
+    //     dat.setState({error: error.toString()})
+    //   });
   }
 
   handleEmailSubmit(e) {
     e.preventDefault()
-    return firebaseAuth()
-      .createUserWithEmailAndPassword(this.state.email.value, this.state.pw.value)
-        .catch(error => this.setState({error : error.toString()}))
+    axios.post('http://localhost:1337/auth/signup/email', {
+      "username" : this.state.email, 
+      "password" : this.state.pw
+    })
+    .then(res => {
+      if (res.data.error) { this.setState({error : res.data.error}) }
+      else {
+        let userObj = res.data
+        // this is sent down from app through authScreen. It sets state in App, 
+        // which in turn calls checkAuthStatus from authHelpers. 
+        this.props.sendUserInfoToApp(userObj.currentUser)
+      }
+    }) 
   }  
 
   render() {
@@ -66,7 +78,7 @@ export default class Signup extends React.Component {
 
         <LinkButton 
           title='Sign Up With Email' 
-          clickFunction={this.handleGoogleSubmit} 
+          clickFunction={this.handleEmailSubmit} 
         />
 
         <Text> {this.state.error} </Text>  

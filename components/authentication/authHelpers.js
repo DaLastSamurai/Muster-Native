@@ -1,46 +1,44 @@
-import { firebaseAuth } from '../../config/firebase/firebaseCredentials';
+import { firebaseAuth, users } from '../../config/firebase/firebaseCredentials';
 import firebase from 'firebase'
 
-// this is used in the app.js to check to see if there is a user signed in. 
+// this is used in the app.js to check to see if there is a userObj signed in. 
+// this function is wrapped in an if statement in the componentDidUpdate where
+// it should only update if authed === false. 
 
-export const checkAuthStatus = function() {
-  firebaseAuth().onAuthStateChanged((user) => {
-    if (user) {
-      this.setState({
-        authed: true,
-        user: user,
-        userId: user.uid,
-      }, () => {
-        firebase.database().ref(`/users/${user.uid}/defaultsSet`).on('value', (snapshot) => {
-          // if the defaults have not been set: 
-          if (!snapshot.val()) { 
-            // set defaults:
-            let basicInfo = {
-              email: user.email, 
-              isPaidUser: false, 
-            }
-            let profileInfo = {
-              profilePhoto: 'http://bit.ly/2BoCV0Y', 
-              // following: ['AStkSi2lt3hFprd77H8GXoNq2KJ3'], // =seamus lol 
-              // followers: ['AStkSi2lt3hFprd77H8GXoNq2KJ3'], // =seamus lol 
-              bio: 'tell me about yourself...', 
-              favoriteCategories: ['Baseball Cards'],
-              username : user.email, 
-            }
-            let updates = {};
-            updates[user.uid + '/defaultsSet'] = true; 
-            updates[user.uid + '/profileInfo'] = profileInfo
-            updates[user.uid + '/collectionIds'] = [0]; 
-            updates[user.uid + '/info'] = basicInfo;
-            return users.update(updates)
+export const checkAuthStatus = function(userObj) {
+  console.log('checkAuthStatus called!')
+  if (userObj) {
+    this.setState({
+      authed: true,
+      userObj: userObj,
+    }, () => {
+      firebase.database().ref(`/users/${userObj.uid}/defaultsSet`).on('value', (snapshot) => {
+        // if the defaults have not been set (the user is signing up): 
+        if (!snapshot.val()) { 
+          // set defaults:
+          let basicInfo = {
+            email: userObj.email, 
+            isPaiduser: false, 
           }
-        })
+          let profileInfo = {
+            profilePhoto: 'http://bit.ly/2BoCV0Y', 
+            bio: 'no profile bio yet', 
+            favoriteCategories: ['Marvel Comics'],
+            username : userObj.email, 
+          }
+          let updates = {};
+          updates[userObj.uid + '/defaultsSet'] = true; 
+          updates[userObj.uid + '/profileInfo'] = profileInfo
+          updates[userObj.uid + '/collectionIds'] = [0]; 
+          updates[userObj.uid + '/info'] = basicInfo;
+          return users.update(updates)
+        }
       })
-    } else {
-      this.setState({
-        authed : false,
-        user : null,
-      })
-    }
-  })
+    })
+  } else {
+    this.setState({
+      authed : false,
+      userObj : null,
+    })
+  }
 }
