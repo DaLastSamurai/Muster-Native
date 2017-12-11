@@ -11,22 +11,40 @@ export default class App extends React.Component {
     this.state = {
       authed: false,
       user: null,
+      userObj: null
     };
+
     this.checkAuthStatus = checkAuthStatus.bind(this);
+    this.getUserInfoFromAuth = this.getUserInfoFromAuth.bind(this)
   }
 
   componentWillMount() {
-    this.checkAuthStatus()
+    // this is responsible for determining if a user is authed. 
+    // this.checkAuthStatus(this.state.userObj)
   }
 
+  componentDidUpdate() {
+    // only call the checkAuthStatus if a user is not authed. 
+    if (!this.state.authed) {
+      this.checkAuthStatus(this.state.userObj)
+    }
+  }
+
+  getUserInfoFromAuth(userObj) { 
+    this.setState({userObj}) 
+  }
 
   render() {
-
+    console.log('auth status in app: ', this.state.authed)
+    // console.log('the userObj state in app: ', this.state.userObj)
     return (
       <View style={styles.container}>
         {this.state.authed 
           ? <Text>This is what an Authenticated User Sees</Text>
-          : <AuthScreen isSigningUp = {false}/> 
+          : <AuthScreen 
+              isSigningUp = {false} 
+              sendUserInfoToApp = {this.getUserInfoFromAuth}
+            /> 
         }
       </View>
     );
