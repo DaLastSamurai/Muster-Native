@@ -1,10 +1,12 @@
+import Expo from 'expo';
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import firebase from 'firebase'
 import axios from 'axios'
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
-// import { firebaseAuth, users} from '../../config/firebase/firebaseCredentials';
-import { provider } from '../../config/firebase/firebaseAuthCredentials';
+import { firebaseAuth, users} from '../../config/firebase/firebaseCredentials';
+// import { provider } from '../../config/firebase/firebaseAuthCredentials';
+import { iosClientId, emailSignInPass } from '../../config/firebase/loginWithGoogleCredentials'
 import LinkButton from '../helperComponents/LinkButton'
 
 export default class Signup extends React.Component {
@@ -16,21 +18,41 @@ export default class Signup extends React.Component {
       pw : "", 
     }; 
     this.handleEmailSubmit = this.handleEmailSubmit.bind(this)
-    this.handleGoogleSubmit = this.handleGoogleSubmit.bind(this)
+    
+    // this has to go in the constructor so that I can use async.
+    this._signUpWithGoogle = async (e) => {
+      try {
+        const result = await Expo.Google.logInAsync({
+          iosClientId: iosClientId,
+          scopes: ['profile', 'email'],
+        });
+
+        if (result.type === 'success') {
+          console.log('this')
+          let email = result.user.email; 
+          let pw = emailSignInPass; 
+          this.setState({ email }, () => {
+            this.setState({ pw }, () => {
+              this.handleEmailSubmit() 
+            })
+          })
+          return result.accessToken;
+        } else {
+          return {cancelled: true};
+        }
+      } catch(e) {
+        return {error: true};
+      }
+    }
+    
+    this._signUpWithGoogle = this._signUpWithGoogle.bind(this)
   }
 
-  handleGoogleSubmit(e) {
-    console.log('that is getting run')
-    // var dat = this
-    e.preventDefault(); 
-    // firebaseAuth().signInWithRedirect(provider)
-    //   .catch(function(error) {
-    //     dat.setState({error: error.toString()})
-    //   });
-  }
 
   handleEmailSubmit(e) {
-    e.preventDefault()
+    // console.log('the handleEmailSubmit is running')
+    e ? e.preventDefault() : null
+    // console.log('email: ', this.state.email, 'pw: ', this.state.pw)
     axios.post('http://localhost:1337/auth/signup/email', {
       "username" : this.state.email, 
       "password" : this.state.pw
@@ -46,15 +68,16 @@ export default class Signup extends React.Component {
     }) 
   }  
 
+
   render() {
     return (
       <View> 
         {/* This is the google authentication: */}
-          
         <LinkButton 
-          title='Signup With Google' 
-          clickFunction={this.handleGoogleSubmit} 
-        />
+          title="Sign Up With Google"
+          clickFunction={this._signUpWithGoogle}
+        /> 
+
         <Text style={styles.decisionText}> Or Sign Up With Email </Text> 
         {/* This is the email auth*/}
         <FormInput 
