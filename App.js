@@ -28,6 +28,10 @@ export default class App extends React.Component {
     if (!this.state.authed) {
       this.checkAuthStatus(this.state.userObj)
     }
+    // calling render here makes sure that the app gets the updated user 
+    // information. THIS MIGHT BECOME A PROBLEM WHEN COMPONENTS BELOW THE APP 
+    // STARTS RERENDERING, triggering rerendering on app updates. 
+    this.render() 
   }
 
   getUserInfoFromAuth(userObj) { 
@@ -36,6 +40,7 @@ export default class App extends React.Component {
 
   render() {
     console.log('auth status in app: ', this.state.authed)
+    console.log('this is the userObj in app', this.state.userObj)
     // console.log('the userObj state in app: ', this.state.userObj)
     return (
       <View style={styles.container}>
