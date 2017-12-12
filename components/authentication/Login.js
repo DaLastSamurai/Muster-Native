@@ -5,7 +5,6 @@ import firebase from 'firebase'
 import axios from 'axios'
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 import { firebaseAuth, users} from '../../config/firebase/firebaseCredentials';
-import { provider } from '../../config/firebase/firebaseAuthCredentials';
 
 import { iosClientId, emailSignInPass } from '../../config/firebase/loginWithGoogleCredentials'
 import LinkButton from '../helperComponents/LinkButton'

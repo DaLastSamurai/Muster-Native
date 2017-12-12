@@ -1,8 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import AuthScreen from './components/authentication/AuthScreen'
-import { checkAuthStatus } from './components/authentication/authHelpers';
 
+import { checkAuthStatus } from './components/authentication/authHelpers';
+import AuthScreen from './components/authentication/AuthScreen'
+import ScanScreen from './components/scanInput/ScanScreen'
 
 export default class App extends React.Component {
   constructor(props) {
@@ -16,11 +17,6 @@ export default class App extends React.Component {
 
     this.checkAuthStatus = checkAuthStatus.bind(this);
     this.getUserInfoFromAuth = this.getUserInfoFromAuth.bind(this)
-  }
-
-  componentWillMount() {
-    // this is responsible for determining if a user is authed. 
-    // this.checkAuthStatus(this.state.userObj)
   }
 
   componentDidUpdate() {
@@ -41,11 +37,13 @@ export default class App extends React.Component {
   render() {
     console.log('auth status in app: ', this.state.authed)
     console.log('this is the userObj in app', this.state.userObj)
-    // console.log('the userObj state in app: ', this.state.userObj)
+
     return (
       <View style={styles.container}>
-        {this.state.authed 
-          ? <Text>This is what an Authenticated User Sees</Text>
+        {this.state.authed
+          ? <ScanScreen 
+              userObj = {JSON.parse(JSON.stringify(this.state.userObj))} 
+            /> 
           : <AuthScreen 
               isSigningUp = {false} 
               sendUserInfoToApp = {this.getUserInfoFromAuth}
