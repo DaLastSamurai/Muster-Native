@@ -23,3 +23,5 @@ Each folder (besides the persistentComponents) is a different page of the app.
 DON'T TOUCH UNDER ANY CIRCUMSTANCES: 
   app.json
   
+
+I have ejected this app from the CRNA. This shouldn't impact anyone's use.

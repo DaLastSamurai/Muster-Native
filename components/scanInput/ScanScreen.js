@@ -12,13 +12,13 @@ export default class ScanScreen extends React.Component {
     super(props);
     this.state = {
       manualScreenLoaded: false,
-      itemData: [],
+      itemId: '' // this is the hash that comes back from axios request on scanner.
     };
-    this.passItemDataToScanScreen = this.passItemDataToScanScreen.bind(this)
+    this.passItemIdToScanScreen = this.passItemIdToScanScreen.bind(this)
     this.toggleManualScreenLoaded = this.toggleManualScreenLoaded.bind(this)
   }
 
-  passItemDataToScanScreen(itemData) { this.setState({ itemData }) }
+  passItemIdToScanScreen(itemId) { this.setState({ itemId }) }
   toggleManualScreenLoaded(manualScreenLoaded = !this.state.manualScreenLoaded) {
     this.setState({manualScreenLoaded})
   }
@@ -26,13 +26,14 @@ export default class ScanScreen extends React.Component {
 
 
   render() {
+    console.log('this is the state of itemId', this.state.itemId)
     return this.state.manualScreenLoaded 
     ? ( 
       <View>
         <Text> You are authed and on the ManualScreen </Text> 
         {/* This is the manual add items (or add information) */}
         <ManualScreen 
-          itemData = {this.state.itemData} 
+          itemId = {this.state.itemId} 
           userObj = {this.props.userObj}
           toggleManualScreenLoaded = {this.toggleManualScreenLoaded}
         /> 
@@ -40,8 +41,9 @@ export default class ScanScreen extends React.Component {
     ) : (
       <View>
         <Scanner 
-
-          passItemDataToScanScreen = {this.passItemDataToScanScreen}
+          userObj = {this.props.userObj}
+          passItemIdToScanScreen = {this.passItemIdToScanScreen}
+          toggleManualScreenLoaded = {this.toggleManualScreenLoaded}
         /> 
       </View>
     )

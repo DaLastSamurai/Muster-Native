@@ -10,7 +10,7 @@ export default class ManualScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      itemData : null, 
     };
     this.parseItemData = this.parseItemData.bind(this)
     this.sendItemDataToWebClient = this.sendItemDataToWebClient.bind(this)
@@ -19,13 +19,13 @@ export default class ManualScreen extends React.Component {
 
 
   componentWillMount() {
-    this.parseItemData()
+    this.loadItemData(this.props.itemId)
   }
 
-  parseItemData() {
-    // this takes data from this.props.itemData and parses it so that it is of 
-    // the same format as the addItems (web client). 
-
+  parseItemData(data) {
+    // this takes data from this.props.itemId and looks up that item in the db.
+    // this data is the same format as the addItems (web client). 
+    console.log('this is the data in the ManualScreen parseItemData', data)
   }
 
   sendItemDataToWebClient() {
@@ -41,6 +41,11 @@ export default class ManualScreen extends React.Component {
   render() {
     return ( 
       <View>
+        <Text> 
+          THIS IS THE MANUAL SCREEN. 
+          {JSON.stringify(this.props.itemData)}
+        </Text> 
+
 
         <LinkButton 
           title='Send Data To Web' 
@@ -51,6 +56,11 @@ export default class ManualScreen extends React.Component {
           title='Add Item' 
           clickFunction={this.addItemToDatabase} 
         /> 
+
+        <Text> 
+          THIS IS THE MANUAL SCREEN. 
+        </Text> 
+
       </View>
     )
   }

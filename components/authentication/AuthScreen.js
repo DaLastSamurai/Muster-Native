@@ -44,6 +44,7 @@ export default class AuthScreen extends React.Component {
     return this.state.isSigningUp 
     ? (
       <View> 
+        <Text> Things change live </Text> 
         <Signup 
           loadLoginPage = {this.loadLoginPage}
           sendUserInfoToApp = {this.props.sendUserInfoToApp}
