@@ -4,8 +4,9 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 import firebase from 'firebase'
 import axios from 'axios'
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
+
 import { firebaseAuth, users} from '../../config/firebase/firebaseCredentials';
-// import { provider } from '../../config/firebase/firebaseAuthCredentials';
+import { herokuUrl, localhost } from '../../config/serverConfig.js'
 import { iosClientId, emailSignInPass } from '../../config/firebase/loginWithGoogleCredentials'
 import LinkButton from '../helperComponents/LinkButton'
 
@@ -28,7 +29,6 @@ export default class Signup extends React.Component {
         });
 
         if (result.type === 'success') {
-          console.log('this')
           let email = result.user.email; 
           let pw = emailSignInPass; 
           this.setState({ email }, () => {
@@ -52,8 +52,8 @@ export default class Signup extends React.Component {
   handleEmailSubmit(e) {
     // console.log('the handleEmailSubmit is running')
     e ? e.preventDefault() : null
-    // console.log('email: ', this.state.email, 'pw: ', this.state.pw)
-    axios.post('http://localhost:1337/auth/signup/email', {
+    // replace with localhost or herokuUrl to run on heroku or locally. 
+    axios.post(`${herokuUrl}/auth/signup/email`, {
       "username" : this.state.email, 
       "password" : this.state.pw
     })

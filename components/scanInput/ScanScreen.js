@@ -12,7 +12,7 @@ export default class ScanScreen extends React.Component {
     super(props);
     this.state = {
       manualScreenLoaded: false,
-      itemData: [],
+      itemData: {} // this is the object that comes from the scanner.
     };
     this.passItemDataToScanScreen = this.passItemDataToScanScreen.bind(this)
     this.toggleManualScreenLoaded = this.toggleManualScreenLoaded.bind(this)
@@ -26,6 +26,7 @@ export default class ScanScreen extends React.Component {
 
 
   render() {
+    console.log('this is the state of itemData', this.state.itemData)
     return this.state.manualScreenLoaded 
     ? ( 
       <View>
@@ -40,8 +41,9 @@ export default class ScanScreen extends React.Component {
     ) : (
       <View>
         <Scanner 
-
+          userObj = {this.props.userObj}
           passItemDataToScanScreen = {this.passItemDataToScanScreen}
+          toggleManualScreenLoaded = {this.toggleManualScreenLoaded}
         /> 
       </View>
     )

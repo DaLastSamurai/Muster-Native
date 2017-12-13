@@ -1,3 +1,4 @@
+import Expo from 'expo';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -36,7 +37,7 @@ export default class App extends React.Component {
 
   render() {
     console.log('auth status in app: ', this.state.authed)
-    console.log('this is the userObj in app', this.state.userObj)
+    // console.log('this is the userObj in app', this.state.userObj)
 
     return (
       <View style={styles.container}>

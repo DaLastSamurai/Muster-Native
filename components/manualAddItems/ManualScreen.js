@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-
+import firebase from 'firebase'
 import LinkButton from '../helperComponents/LinkButton'
 
 // this component takes props from ScanScreen and sets state in ScanScreen to 
@@ -10,7 +10,7 @@ export default class ManualScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      itemData : null, 
     };
     this.parseItemData = this.parseItemData.bind(this)
     this.sendItemDataToWebClient = this.sendItemDataToWebClient.bind(this)
@@ -19,13 +19,23 @@ export default class ManualScreen extends React.Component {
 
 
   componentWillMount() {
-    this.parseItemData()
+    this.parseItemData(this.props.itemData)
   }
 
-  parseItemData() {
-    // this takes data from this.props.itemData and parses it so that it is of 
-    // the same format as the addItems (web client). 
-
+  parseItemData(data) {
+    // this takes data from this.props.itemData and looks up that item in the db.
+    // this data is the same format as the addItems (web client). 
+    let parsedObj = {}
+    parsedObj['title'] = data.name || ''
+    parsedObj['author'] = data.author || data.publisher || ''
+    parsedObj['subject'] = data.features.Subject || ''
+    parsedObj['notes'] = data.features.blob || ''
+    parsedObj['images'] = data.images || []
+    parsedObj['upc'] = data.ean || 0
+    parsedObj['onlinePrice'] = data.price || ''
+    parsedObj['storeLinks'] = data.sitedetails[0].latestoffers || {}
+    // console.log('this is the parsedObj in the parseItemData: ', parsedObj)
+    firebase.database().ref(`items-scanned/${this.props.userObj.uid}`).push(parsedObj)
   }
 
   sendItemDataToWebClient() {
@@ -41,15 +51,23 @@ export default class ManualScreen extends React.Component {
   render() {
     return ( 
       <View>
+        <Text> 
+          THIS IS THE MANUAL SCREEN. 
+        </Text> 
 
-        <LinkButton 
-          title='Send Data To Web' 
-          clickFunction={this.sendItemDataToWebClient} 
-        />
 
         <LinkButton
           title='Add Item' 
           clickFunction={this.addItemToDatabase} 
+        /> 
+
+        <Text> 
+          ==THIS IS WHERE THE FIELDS WILL GO==
+        </Text> 
+
+        <LinkButton
+          title='Scan Another Item' 
+          clickFunction={() => {this.props.toggleManualScreenLoaded(false)} } 
         /> 
       </View>
     )
