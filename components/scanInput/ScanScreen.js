@@ -26,7 +26,6 @@ export default class ScanScreen extends React.Component {
 
 
   render() {
-    console.log('this is the state of itemData', this.state.itemData)
     return this.state.manualScreenLoaded 
     ? ( 
       <View>

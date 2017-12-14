@@ -15,7 +15,6 @@ export default class Scanner extends React.Component {
     this.handleScan = this.handleScan.bind(this)
   }
 
-
   async componentWillMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({hasCameraPermission: status === 'granted'});
@@ -30,9 +29,8 @@ export default class Scanner extends React.Component {
       axios.get(`${herokuUrl}/scan/sem3/upc/${upcCode}`)
         .then(res => {
           if (res.data.code !== "OK") {
-            alert(`There was an error parsing this UPC. Please try again. res code: ${res.status}`)}
-          // console.log('this is the data that comes back from the axios request: ', res.data.results[0])
-          // console.log('this is the status code: ', res.status)
+          alert(`There was an error parsing this UPC. 
+            Please try again. res code: ${res.status}`)}
           this.props.passItemDataToScanScreen(res.data.results[0])
           this.props.toggleManualScreenLoaded()
         })
@@ -40,7 +38,7 @@ export default class Scanner extends React.Component {
   }
 
   render() {
-    console.log('this is the userObj.uid in the Scanner: ', this.props.userObj.uid )
+    // console.log('this is the userObj.uid in the Scanner: ', this.props.userObj.uid )
     return this.state.hasCameraPermission === null 
     ? <Text>Requesting camera permission...</Text> 
     
