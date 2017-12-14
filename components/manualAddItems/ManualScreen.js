@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import firebase from 'firebase'
 import LinkButton from '../helperComponents/LinkButton'
-
+import CarouselInputFields from './CarouselInputFields'
 // this component takes props from ScanScreen and sets state in ScanScreen to 
 // render this screen or the Scanner. 
 
@@ -30,10 +30,11 @@ export default class ManualScreen extends React.Component {
     parsedObj['author'] = data.author || data.publisher || ''
     parsedObj['subject'] = data.features.Subject || ''
     parsedObj['notes'] = data.features.blob || ''
-    parsedObj['images'] = data.images || []
+    parsedObj['images'] = data.images || ['https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg']
     parsedObj['upc'] = data.ean || 0
     parsedObj['onlinePrice'] = data.price || ''
     parsedObj['storeLinks'] = data.sitedetails[0].latestoffers || {}
+    parsedObj['timeAdded'] = Date.now()
     // console.log('this is the parsedObj in the parseItemData: ', parsedObj)
     firebase.database().ref(`items-scanned/${this.props.userObj.uid}`).push(parsedObj)
   }
@@ -51,20 +52,9 @@ export default class ManualScreen extends React.Component {
   render() {
     return ( 
       <View>
-        <Text> 
-          THIS IS THE MANUAL SCREEN. 
-        </Text> 
-
-
-        <LinkButton
-          title='Add Item' 
-          clickFunction={this.addItemToDatabase} 
+        <CarouselInputFields 
+          uid = {this.props.userObj.uid}
         /> 
-
-        <Text> 
-          ==THIS IS WHERE THE FIELDS WILL GO==
-        </Text> 
-
         <LinkButton
           title='Scan Another Item' 
           clickFunction={() => {this.props.toggleManualScreenLoaded(false)} } 
