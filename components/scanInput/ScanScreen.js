@@ -29,7 +29,7 @@ export default class ScanScreen extends React.Component {
     ? ( 
       <View>
         {/* The new line is there purely for styling. */}
-        <Text> /n </Text> 
+        <Text> {"    "} </Text> 
         {/* This is the manual add items (or add information) */}
         <ManualScreen 
           sentFromButton = {this.state.sendingFromButton}
