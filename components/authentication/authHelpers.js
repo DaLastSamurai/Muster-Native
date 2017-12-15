@@ -23,7 +23,7 @@ export const checkAuthStatus = function(userObj) {
           let profileInfo = {
             profilePhoto: 'http://bit.ly/2BoCV0Y', 
             bio: 'no profile bio yet', 
-            favoriteCategories: ['Marvel Comics'],
+            // favoriteCategories: ['Marvel Comics'],
             username : userObj.email, 
           }
           let updates = {};
