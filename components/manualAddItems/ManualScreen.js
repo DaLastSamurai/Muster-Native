@@ -13,13 +13,11 @@ export default class ManualScreen extends React.Component {
       itemData : null, 
     };
     this.parseItemData = this.parseItemData.bind(this)
-    this.sendItemDataToWebClient = this.sendItemDataToWebClient.bind(this)
-    this.addItemToDatabase = this.addItemToDatabase.bind(this)
   }
 
 
   componentWillMount() {
-    this.parseItemData(this.props.itemData)
+    if (!this.props.sentFromButton) {this.parseItemData(this.props.itemData)}
   }
 
   parseItemData(data) {
@@ -39,21 +37,12 @@ export default class ManualScreen extends React.Component {
     firebase.database().ref(`items-scanned/${this.props.userObj.uid}`).push(parsedObj)
   }
 
-  sendItemDataToWebClient() {
-
-    // this will be sent in the callback of the data this.props.toggleManualScreenLoaded()
-  }
-
-  addItemToDatabase() {
-    // this will add the item directly to the database. 
-    
-  }
-
   render() {
     return ( 
       <View>
         <CarouselInputFields 
           uid = {this.props.userObj.uid}
+          toggleManualScreenLoaded = {this.props.toggleManualScreenLoaded}
         /> 
         <LinkButton
           title='Scan Another Item' 
