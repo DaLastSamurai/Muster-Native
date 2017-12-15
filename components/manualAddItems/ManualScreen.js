@@ -1,4 +1,5 @@
 import React from 'react';
+import { Constants, Location, Permissions } from 'expo';
 import { StyleSheet, Text, View } from 'react-native';
 import firebase from 'firebase'
 import LinkButton from '../helperComponents/LinkButton'
@@ -11,19 +12,36 @@ export default class ManualScreen extends React.Component {
     super(props);
     this.state = {
       itemData : null, 
+      location : null, 
     };
     this.parseItemData = this.parseItemData.bind(this)
+    
+    // this is added to this directly so that I could make it a async function.
+    this._getLocationAsync = async (cb) => {
+      let { status } = await Permissions.askAsync(Permissions.LOCATION);
+      if (status !== 'granted') {
+        let location = 'Permission to access location was denied'
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      // the callback here is the parseItem. setState was not working becauase of 
+      // the 'this' context. Passing these as args fixes this problem. 
+      cb(this.props.itemData, location);
+    };
   }
-
 
   componentWillMount() {
-    if (!this.props.sentFromButton) {this.parseItemData(this.props.itemData)}
+    // this will run the parseItemData only after location data is gathered, and
+    // only if the user was directed to the page after scanning an item. 
+    this._getLocationAsync((data, location) => {
+      if (!this.props.sentFromButton) {this.parseItemData(data, location)}
+    }); 
   }
 
-  parseItemData(data) {
+  parseItemData(data, location) {
     // this takes data from this.props.itemData and looks up that item in the db.
     // this data is the same format as the addItems (web client). 
     let parsedObj = {}
+
     parsedObj['title'] = data.name || ''
     parsedObj['author'] = data.author || data.publisher || ''
     parsedObj['subject'] = data.features.Subject || ''
@@ -33,7 +51,15 @@ export default class ManualScreen extends React.Component {
     parsedObj['onlinePrice'] = data.price || ''
     parsedObj['storeLinks'] = data.sitedetails[0].latestoffers || {}
     parsedObj['timeAdded'] = Date.now()
-    // console.log('this is the parsedObj in the parseItemData: ', parsedObj)
+
+    let _geoloc = {}
+    // this only sets the location if the location was correctly created. 
+    if (typeof location === 'object') {
+      _geoloc['lat'] = location.coords.latitude
+      _geoloc['lng'] = location.coords.longitude
+    } else {_geoloc['error'] = location}
+    parsedObj['_geoloc'] = _geoloc
+
     firebase.database().ref(`items-scanned/${this.props.userObj.uid}`).push(parsedObj)
   }
 

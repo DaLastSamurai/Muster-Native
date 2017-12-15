@@ -17,6 +17,7 @@ export default class ResetPassword extends React.Component {
   }
 
   resetPassword(e) {
+    // TODO: need to move this to the express server. 
     e.preventDefault(); 
     firebaseAuth().sendPasswordResetEmail(this.state.email.value)
       .then(() => this.setState({error : 
