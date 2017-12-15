@@ -12,7 +12,8 @@ export default class ScanScreen extends React.Component {
     super(props);
     this.state = {
       manualScreenLoaded: false,
-      itemData: {} // this is the object that comes from the scanner.
+      itemData: {}, // this is the object that comes from the scanner.
+      sendingFromButton: false,
     };
     this.passItemDataToScanScreen = this.passItemDataToScanScreen.bind(this)
     this.toggleManualScreenLoaded = this.toggleManualScreenLoaded.bind(this)
@@ -23,15 +24,15 @@ export default class ScanScreen extends React.Component {
     this.setState({manualScreenLoaded})
   }
 
-
-
   render() {
     return this.state.manualScreenLoaded 
     ? ( 
       <View>
-        <Text> You are authed and on the ManualScreen </Text> 
+        {/* The new line is there purely for styling. */}
+        <Text> /n </Text> 
         {/* This is the manual add items (or add information) */}
         <ManualScreen 
+          sentFromButton = {this.state.sendingFromButton}
           itemData = {this.state.itemData} 
           userObj = {this.props.userObj}
           toggleManualScreenLoaded = {this.toggleManualScreenLoaded}
@@ -39,10 +40,18 @@ export default class ScanScreen extends React.Component {
       </View>
     ) : (
       <View>
-        <Scanner 
+        <Scanner
           userObj = {this.props.userObj}
           passItemDataToScanScreen = {this.passItemDataToScanScreen}
           toggleManualScreenLoaded = {this.toggleManualScreenLoaded}
+        /> 
+        <LinkButton
+          title = "Go To Your Items"
+          clickFunction = {() => {
+            this.setState({manualScreenLoaded : true}, 
+              this.setState({sendingFromButton : true}))
+            }
+          }
         /> 
       </View>
     )
