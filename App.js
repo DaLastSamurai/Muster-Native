@@ -6,7 +6,6 @@ import { checkAuthStatus } from './components/authentication/authHelpers';
 import AuthScreen from './components/authentication/AuthScreen'
 import ScanScreen from './components/scanInput/ScanScreen'
 import VirtualBookshelfScreen from './components/ARLibrary/VirtualBookshelfScreen'
-// console.disableYellowBox = true; // gets rid of all warnings. 
 
 export default class App extends React.Component {
   constructor(props) {
@@ -36,22 +35,23 @@ export default class App extends React.Component {
   }
 
   getUserInfoFromAuth(userObj) { this.setState({userObj}) }
-  navigateToVirtualBookshelf(virtualBookshelfLoaded = !this.state.virtualBookshelfLoaded) {
+  navigateToVirtualBookshelf(e, virtualBookshelfLoaded = !this.state.virtualBookshelfLoaded) {
     this.setState({ virtualBookshelfLoaded })
   }
 
   render() {
-    return (
-      <View style={styles.container}>
+    return this.state.authed && this.state.virtualBookshelfLoaded ? (
+      <VirtualBookshelfScreen 
+        userObj = {JSON.parse(JSON.stringify(this.state.userObj))}
+      /> 
+      ) : (
+
+      <View style = {styles.container}>
         {this.state.authed
-          ? this.state.virtualBookshelfLoaded 
-            ? <VirtualBookshelfScreen 
-                userObj = {JSON.parse(JSON.stringify(this.state.userObj))}
-              /> 
-            : <ScanScreen 
-                userObj = {JSON.parse(JSON.stringify(this.state.userObj))} 
-                navigateToVirtualBookshelf = {this.navigateToVirtualBookshelf}
-              />
+          ? <ScanScreen 
+              userObj = {JSON.parse(JSON.stringify(this.state.userObj))} 
+              navigateToVirtualBookshelf = {this.navigateToVirtualBookshelf}
+            />
             
           : <AuthScreen 
               isSigningUp = {false} 
@@ -63,7 +63,6 @@ export default class App extends React.Component {
   }
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -72,3 +71,4 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
   },
 });
+

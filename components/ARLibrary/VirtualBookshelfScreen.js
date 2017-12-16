@@ -6,7 +6,8 @@ import ExpoTHREE from 'expo-three'; // 2.0.2
 
 console.disableYellowBox = true;
 
-export default class VirtualBookShelf extends React.Component {
+
+export default class VirtualBookshelfScreen extends React.Component {
 
   _onGLContextCreate = async (gl) => {
     const width = gl.drawingBufferWidth;
@@ -41,6 +42,7 @@ export default class VirtualBookShelf extends React.Component {
   }
 
   render() {
+    console.log('this is getting run. ')
     return (
       <Expo.GLView
         ref={(ref) => this._glView = ref}
@@ -51,7 +53,6 @@ export default class VirtualBookShelf extends React.Component {
   }
 
 }
-
 
 // Helper functions: 
 
