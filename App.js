@@ -5,6 +5,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import { checkAuthStatus } from './components/authentication/authHelpers';
 import AuthScreen from './components/authentication/AuthScreen'
 import ScanScreen from './components/scanInput/ScanScreen'
+import VirtualBookshelfScreen from './components/ARLibrary/VirtualBookshelfScreen'
+// console.disableYellowBox = true; // gets rid of all warnings. 
 
 export default class App extends React.Component {
   constructor(props) {
@@ -13,11 +15,13 @@ export default class App extends React.Component {
     this.state = {
       authed: false,
       user: null,
-      userObj: null
+      userObj: null, 
+      virtualBookshelfLoaded: false, 
     };
 
     this.checkAuthStatus = checkAuthStatus.bind(this);
     this.getUserInfoFromAuth = this.getUserInfoFromAuth.bind(this)
+    this.navigateToVirtualBookshelf = this.navigateToVirtualBookshelf.bind(this)
   }
 
   componentDidUpdate() {
@@ -31,22 +35,29 @@ export default class App extends React.Component {
     this.render() 
   }
 
-  getUserInfoFromAuth(userObj) { 
-    this.setState({userObj}) 
+  getUserInfoFromAuth(userObj) { this.setState({userObj}) }
+  navigateToVirtualBookshelf(virtualBookshelfLoaded = !this.state.virtualBookshelfLoaded) {
+    this.setState({ virtualBookshelfLoaded })
   }
 
   render() {
     return (
       <View style={styles.container}>
         {this.state.authed
-          ? <ScanScreen 
-              userObj = {JSON.parse(JSON.stringify(this.state.userObj))} 
-            /> 
+          ? this.state.virtualBookshelfLoaded 
+            ? <VirtualBookshelfScreen 
+                userObj = {JSON.parse(JSON.stringify(this.state.userObj))}
+              /> 
+            : <ScanScreen 
+                userObj = {JSON.parse(JSON.stringify(this.state.userObj))} 
+                navigateToVirtualBookshelf = {this.navigateToVirtualBookshelf}
+              />
+            
           : <AuthScreen 
               isSigningUp = {false} 
               sendUserInfoToApp = {this.getUserInfoFromAuth}
             /> 
-        }
+         }
       </View>
     );
   }

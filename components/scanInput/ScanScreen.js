@@ -53,6 +53,10 @@ export default class ScanScreen extends React.Component {
             }
           }
         /> 
+        <LinkButton 
+          title = "Go To Your Virtual Library"
+          clickFunction = {this.props.navigateToVirtualBookshelf}
+        /> 
       </View>
     )
   }
