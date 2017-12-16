@@ -30,14 +30,9 @@ export default class CarouselInputFields extends React.Component {
     this.saveItemToCollection = this.saveItemToCollection.bind(this)
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.getItemsScannedData(this.props.uid)
     this.getUserCollections(this.props.uid)
-  }
-
-  shouldComponentUpdate(next) {
-    console.log('this is the next props: ', next)
-    return true
   }
 
   getItemsScannedData(uid) { 
@@ -229,7 +224,7 @@ export default class CarouselInputFields extends React.Component {
                 numberOfLines = {4000}
               /> 
 
-              <View style={{flexDirection: 'row'}}>
+             {/* <View style={{flexDirection: 'row'}}>
                 <Select
                   onSelect = {
                     (value, name) => {
@@ -263,6 +258,7 @@ export default class CarouselInputFields extends React.Component {
                   clickFunction={() => {this.saveItemToCollection()} } 
                 /> 
               </View>
+            */}
 
 
               <Text> 

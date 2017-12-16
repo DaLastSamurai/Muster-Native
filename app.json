@@ -13,7 +13,7 @@
   // },
   "orientation": "portrait",
   "primaryColor": "#cccccc",
-  "sdkVersion": "23.0.0",
+  "sdkVersion": "24.0.0",
   "ios": {
     "supportsTablet": true, // may need to change this. 
     "bundleIdentifier": "com.mustr.Muster-Native" // firebase references this. DO NOT CHANGE.
