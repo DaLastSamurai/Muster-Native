@@ -74,7 +74,7 @@ export default class Login extends React.Component {
   render() {
     return (
       <View> 
-        <FormLabel> Login </FormLabel>
+        <Text>     </Text> 
         
         {/* This is the google authentication: */}
         <LinkButton 

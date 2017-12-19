@@ -12,7 +12,8 @@ export const checkAuthStatus = function(userObj) {
       authed: true,
       userObj: userObj,
     }, () => {
-      firebase.database().ref(`/users/${userObj.uid}/defaultsSet`).on('value', (snapshot) => {
+      firebase.database().ref(`/users/${userObj.uid}/defaultsSet`).on('value', 
+        (snapshot) => {
         // if the defaults have not been set (the user is signing up): 
         if (!snapshot.val()) { 
           // set defaults:
@@ -23,13 +24,13 @@ export const checkAuthStatus = function(userObj) {
           let profileInfo = {
             profilePhoto: 'http://bit.ly/2BoCV0Y', 
             bio: 'no profile bio yet', 
-            // favoriteCategories: ['Marvel Comics'],
+            following: ['RKBeM50YH3VBRY6Io8UUL8eojPo1'], // =seamus lol 
+            followers: ['RKBeM50YH3VBRY6Io8UUL8eojPo1'], // =seamus lol 
             username : userObj.email, 
           }
           let updates = {};
           updates[userObj.uid + '/defaultsSet'] = true; 
           updates[userObj.uid + '/profileInfo'] = profileInfo
-          updates[userObj.uid + '/collectionIds'] = [0]; 
           updates[userObj.uid + '/info'] = basicInfo;
           return users.update(updates)
         }
