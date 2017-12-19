@@ -28,11 +28,24 @@ export default class Scanner extends React.Component {
       const uid = this.props.userObj.uid
       axios.get(`${herokuUrl}/scan/sem3/upc/${upcCode}`)
         .then(res => {
+          // console.log('this is the data on handle scan', res.data)
           if (res.data.code !== "OK") {
-          alert(`There was an error parsing this UPC. 
-            Please try again. res code: ${res.status}`)}
-          this.props.passItemDataToScanScreen(res.data.results[0])
-          this.props.toggleManualScreenLoaded()
+            console.log('there was an error parsing!')
+            alert(`There was an error parsing this UPC. Please try again. Fail code: ${res.status}`)
+          } else if (res.data.message === "No results found; please modify your request.") {
+            console.log('there were no results for the UPC!')
+            Alert.alert(`There were no results for this UPC. You can still add the item manually by going to 'Your Items'`,
+              "", 
+              [{
+                text : 'Take Me To My Items', 
+                onPress: () => this.props.toggleManualScreenLoaded()
+              }]
+            )
+          } else {
+            console.log('item successfully scanned.')
+            this.props.passItemDataToScanScreen(res.data.results[0])
+            this.props.toggleManualScreenLoaded() 
+          }
         })
     }
   }
@@ -40,14 +53,21 @@ export default class Scanner extends React.Component {
   render() {
     // console.log('this is the userObj.uid in the Scanner: ', this.props.userObj.uid )
     return this.state.hasCameraPermission === null 
-    ? <Text>Requesting camera permission...</Text> 
+    ? (<View> 
+        <Text>Requesting camera permission. </Text> 
+        <Text> If you have scanned several items, this may take a second. </Text>
+      </View>)
     
     : this.state.hasCameraPermission === false 
     ? <Text>You cannot use this feature if you do not allow camera use</Text> 
     
-    : <View style={{ flex: 1 }}>
+    : <View style={{ flex: 1 }}> 
+        {/* This is where the tint frame will go. */}
         <Text> You are authed, have given permission, and are ready to scan</Text> 
-        <BarCodeScanner
+
+        <BarCodeScanner 
+          style={StyleSheet.absoluteFill}
+          
           onBarCodeRead={(obj) => {
               if (!this.state.alreadyScanned) {
                 this.state.alreadyScanned = true; 
@@ -55,7 +75,6 @@ export default class Scanner extends React.Component {
               }
             }
           }
-          style={StyleSheet.absoluteFill}
         />
       </View>
     

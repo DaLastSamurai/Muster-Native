@@ -12,7 +12,7 @@ export default class CarouselInputFields extends React.Component {
     super(props);
     this.state = {
       itemData: null, 
-      collections: null, 
+      collections: 'not loaded', 
       selectedCollection: null, 
       firstLoaded: false, // see renderFirst function. 
       fieldData: null, 
@@ -21,7 +21,6 @@ export default class CarouselInputFields extends React.Component {
     // first two called on componentDidMount
     this.getItemsScannedData = this.getItemsScannedData.bind(this)
     this.getUserCollections = this.getUserCollections.bind(this)
-    // this._renderItem = this._renderItem.bind(this)
     this.renderFirst = this.renderFirst.bind(this)
     this.renderInputFields = this.renderInputFields.bind(this)
     this.updateDatabase = this.updateDatabase.bind(this)
@@ -71,10 +70,8 @@ export default class CarouselInputFields extends React.Component {
     firebase.database().ref(`item/${itemKey}`).set(itemData, () => {
       firebase.database().ref(`users/${this.props.uid}/itemIds/${itemKey}`)
       .set(itemKey, () => {
-        console.log('this.state.selectedCollection.value', this.state.selectedCollection.value)
         firebase.database().ref(`collection/${this.state.selectedCollection.value}/itemId/${itemKey}`)
         .set(itemKey, () => {
-          // console.log('this is not invalid')
           firebase.database().ref(`items-scanned`).child(this.props.uid)
             .child(itemKey).remove()
         })
@@ -84,18 +81,23 @@ export default class CarouselInputFields extends React.Component {
 
   getUserCollections(uid) {
     firebase.database().ref(`users/${uid}/collectionIds`).on('value', snap => {
-      let collectionsObj = snap.val(); 
-      let keys = Object.keys(collectionsObj)
-      firebase.database().ref(`collection`).on('value', allCols => {
-        let allCollections = allCols.val()
-        let collections = keys.map(colId => {
-          colObj = {}
-          colObj['value'] = colId 
-          colObj['name'] = allCollections[colId].name
-          return colObj
-          })
-        return this.setState({ collections })
-      })
+      // if a user has collections, get them. 
+      if (snap.val() !== null) {
+        let collectionsObj = snap.val(); 
+        let keys = Object.keys(collectionsObj)
+        firebase.database().ref(`collection`).on('value', allCols => {
+          if (snap.val() !== null) {
+            let allCollections = allCols.val()
+            let collections = keys.map(colId => {
+              colObj = {}
+              colObj['value'] = colId 
+              colObj['name'] = allCollections[colId].name
+              return colObj
+              })
+            return this.setState({ collections })
+          }
+        })
+      } else { this.setState({ collections : null})}
     })
   }
 
@@ -120,7 +122,7 @@ export default class CarouselInputFields extends React.Component {
   updateState(text, field) {
     let fieldData = JSON.parse(JSON.stringify(this.state.fieldData))
     fieldData[field] = text
-    this.setState({fieldData})
+    this.setState({ fieldData })
   }
 
   updateDatabase(field) {
@@ -153,11 +155,9 @@ export default class CarouselInputFields extends React.Component {
 
 
   render() {
-    // console.log('this.state.collections: ', this.state.collections)
-    // console.log('this.state.selectedCollection: ', this.state.selectedCollection)
-    // console.log('this.state.fieldData in CarouselInputFields:', this.state.fieldData, 
-      // '\nthis.state.fieldDataHash in CarouselInputFields', this.state.fieldDataHash)
-    return this.state.itemData === null || this.state.collections === null 
+    // console.log('this.state.itemData: ', this.state.itemData, 'this.state.collections: ', this.state.collections)
+    // waits to render carousel until itemData and collections is loaded. 
+    return this.state.itemData === null || this.state.collections === 'not loaded'
     ? <Text> Loading Your Items </Text> 
 
     : this.state.itemData.length > 0
@@ -175,10 +175,10 @@ export default class CarouselInputFields extends React.Component {
           onLayout={!this.state.firstLoaded ? this.renderFirst : () => {}}
         />
 
-          <LinkButton
-            title='Scan A New Item' 
-            clickFunction={() => {this.props.toggleManualScreenLoaded(false)} } 
-          /> 
+        <LinkButton
+          title='Scan A New Item' 
+          clickFunction={() => {this.props.toggleManualScreenLoaded(false)} } 
+        /> 
  
         {this.state.fieldData === null 
           ? <Text> Loading Your Data </Text> 

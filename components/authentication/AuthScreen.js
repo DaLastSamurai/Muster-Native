@@ -12,7 +12,7 @@ AuthScreen
   \___Signup (if this.props.isSigningUp === true)
    \__Login (if this.props.isSigningUp === false)
         \___ResetPassword
-         \__LoginWithQR
+         
 */
 
 export default class AuthScreen extends React.Component {
@@ -44,7 +44,7 @@ export default class AuthScreen extends React.Component {
     return this.state.isSigningUp 
     ? (
       <View> 
-        <Text> Things change live </Text> 
+        <Text>                  </Text> 
         <Signup 
           loadLoginPage = {this.loadLoginPage}
           sendUserInfoToApp = {this.props.sendUserInfoToApp}

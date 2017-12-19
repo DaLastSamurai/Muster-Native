@@ -38,10 +38,10 @@ export default class ManualScreen extends React.Component {
   }
 
   parseItemData(data, location) {
+    console.log('this is what comes into parseItemData: ', data)
     // this takes data from this.props.itemData and looks up that item in the db.
     // this data is the same format as the addItems (web client). 
     let parsedObj = {}
-
     parsedObj['title'] = data.name || ''
     parsedObj['author'] = data.author || data.publisher || ''
     parsedObj['subject'] = data.features.Subject || ''
@@ -51,7 +51,10 @@ export default class ManualScreen extends React.Component {
     parsedObj['onlinePrice'] = data.price || ''
     parsedObj['storeLinks'] = data.sitedetails[0].latestoffers || {}
     parsedObj['timeAdded'] = Date.now()
-
+    parsedObj['dimensionsLWH'] = (data.features['Assembled Product Dimensions (L x W x H)'] || "5.10 x 7.8 x 0.50 Inches")
+      .replace('Inches', '')
+      .split(' x ')
+      .map(dimension => Number(dimension))
     let _geoloc = {}
     // this only sets the location if the location was correctly created. 
     if (typeof location === 'object') {
@@ -59,6 +62,8 @@ export default class ManualScreen extends React.Component {
       _geoloc['lng'] = location.coords.longitude
     } else {_geoloc['error'] = location}
     parsedObj['_geoloc'] = _geoloc
+
+    console.log('this is what leaves parsedObj', parsedObj)
 
     firebase.database().ref(`items-scanned/${this.props.userObj.uid}`).push(parsedObj)
   }
