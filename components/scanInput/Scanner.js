@@ -1,8 +1,9 @@
 import { BarCodeScanner, Permissions } from 'expo';
 import React from 'react';
 import axios from 'axios'; 
-import { StyleSheet, Text, View, Alert } from 'react-native';
+import { StyleSheet, Text, View, Alert, Dimensions } from 'react-native';
 import LinkButton from '../helperComponents/LinkButton'
+import LinkTouchableOpacity from '../helperComponents/LinkTouchableOpacity'
 import { herokuUrl } from '../../config/serverConfig'
 
 export default class Scanner extends React.Component {
@@ -10,14 +11,20 @@ export default class Scanner extends React.Component {
     super(props);
     this.state = {
       hasCameraPermission: null, 
-      alreadyScanned : false
+      alreadyScanned : false, 
+      layout: null
     };
     this.handleScan = this.handleScan.bind(this)
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({hasCameraPermission: status === 'granted'});
+    const layout = {
+          width : Dimensions.get('window').width, 
+          height : Dimensions.get('window').height
+    }
+    this.setState({layout})  
   }
 
   handleScan({type, data}) {
@@ -42,7 +49,7 @@ export default class Scanner extends React.Component {
               }]
             )
           } else {
-            console.log('item successfully scanned.')
+            console.log( 'item successfully scanned.')
             this.props.passItemDataToScanScreen(res.data.results[0])
             this.props.toggleManualScreenLoaded() 
           }
@@ -51,22 +58,21 @@ export default class Scanner extends React.Component {
   }
 
   render() {
-    // console.log('this is the userObj.uid in the Scanner: ', this.props.userObj.uid )
-    return this.state.hasCameraPermission === null 
+    console.log('this is the layout: ', this.state.layout)
+    return this.state.hasCameraPermission === null || this.state.layout === null
     ? (<View> 
         <Text>Requesting camera permission. </Text> 
         <Text> If you have scanned several items, this may take a second. </Text>
       </View>)
     
-    : this.state.hasCameraPermission === false 
+    : this.state.hasCameraPermission === false || this.state.layout === null
     ? <Text>You cannot use this feature if you do not allow camera use</Text> 
     
     : <View style={{ flex: 1 }}> 
-        {/* This is where the tint frame will go. */}
-        <Text> You are authed, have given permission, and are ready to scan</Text> 
-
+          {/* Need to actually manually set width and height here. If you don't,
+              the width will be alittle off. */}
         <BarCodeScanner 
-          style={StyleSheet.absoluteFill}
+          style={{width : this.state.layout['width'], height : this.state.layout['height']}}
           
           onBarCodeRead={(obj) => {
               if (!this.state.alreadyScanned) {
@@ -76,6 +82,19 @@ export default class Scanner extends React.Component {
             }
           }
         />
+        <View style={styles.buttonContainer}>
+          <LinkTouchableOpacity
+            title = "Go To Your Items"
+            clickFunction = {this.props.navigateToYourItems}
+          /> 
+          <Text style = {{ color: 'white', fontSize: 20, textAlign: 'center' }}> 
+            |
+          </Text> 
+          <LinkTouchableOpacity
+            title = "Go To Virtual Library"
+            clickFunction = {this.props.navigateToVirtualBookshelf}
+          />
+        </View> 
       </View>
     
   }
@@ -89,7 +108,23 @@ const styles = StyleSheet.create({
   //   alignItems: 'center',
   //   // justifyContent: 'center',
   // },
+  buttonContainer : {
+    position: 'absolute',
+    flexDirection: 'row',
+    bottom: 8,
+    left: 8,
+    right: 8,
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    borderRadius: 4,
+    borderColor: 'white',
+    borderWidth: StyleSheet.hairlineWidth,
+  }, 
+
+
 });
+
+
+
 
 
 

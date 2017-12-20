@@ -11,23 +11,28 @@ export default class ScanScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      manualScreenLoaded: false,
+      manualScreenLoaded: true,
       itemData: {}, // this is the object that comes from the scanner.
       sendingFromButton: false,
     };
     this.passItemDataToScanScreen = this.passItemDataToScanScreen.bind(this)
     this.toggleManualScreenLoaded = this.toggleManualScreenLoaded.bind(this)
+    this.navigateToYourItems = this.navigateToYourItems.bind(this)
   }
 
   passItemDataToScanScreen(itemData) { this.setState({ itemData }) }
   toggleManualScreenLoaded(manualScreenLoaded = !this.state.manualScreenLoaded) {
     this.setState({manualScreenLoaded})
   }
+  navigateToYourItems() {
+    this.setState({manualScreenLoaded : true}, 
+      this.setState({sendingFromButton : true}))
+  }
 
   render() {
     return this.state.manualScreenLoaded 
     ? ( 
-      <View>
+      <View style={{ flex: 1 }}> 
         {/* The new line is there purely for styling. */}
         <Text> {"    "} </Text> 
         {/* This is the manual add items (or add information) */}
@@ -39,24 +44,14 @@ export default class ScanScreen extends React.Component {
         /> 
       </View>
     ) : (
-      <View>
+      <View style={{ flex: 1 }}> 
         <Scanner
           userObj = {this.props.userObj}
           passItemDataToScanScreen = {this.passItemDataToScanScreen}
           toggleManualScreenLoaded = {this.toggleManualScreenLoaded}
-        /> 
-        <LinkButton
-          title = "Go To Your Items"
-          clickFunction = {() => {
-            this.setState({manualScreenLoaded : true}, 
-              this.setState({sendingFromButton : true}))
-            }
-          }
-        /> 
-        <LinkButton 
-          title = "Go To Your Virtual Library"
-          clickFunction = {this.props.navigateToVirtualBookshelf}
-        /> 
+          navigateToVirtualBookshelf = {this.props.navigateToVirtualBookshelf}
+          navigateToYourItems = {this.navigateToYourItems}
+        />  
       </View>
     )
   }
@@ -64,10 +59,10 @@ export default class ScanScreen extends React.Component {
 
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    // justifyContent: 'center',
-  },
+  // container: {
+  //   flex: 1,
+  //   backgroundColor: '#fff',
+  //   alignItems: 'center',
+  //   // justifyContent: 'center',
+  // },
 });
