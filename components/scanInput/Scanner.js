@@ -20,7 +20,7 @@ export default class Scanner extends React.Component {
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({hasCameraPermission: status === 'granted'});
-    const layout = {
+    const layout = window.layout = {
           width : Dimensions.get('window').width, 
           height : Dimensions.get('window').height
     }
@@ -58,7 +58,7 @@ export default class Scanner extends React.Component {
   }
 
   render() {
-    console.log('this is the layout: ', this.state.layout)
+    console.log('this is the layout: ', window.layout)
     return this.state.hasCameraPermission === null || this.state.layout === null
     ? (<View> 
         <Text>Requesting camera permission. </Text> 
@@ -70,7 +70,7 @@ export default class Scanner extends React.Component {
     
     : <View style={{ flex: 1 }}> 
           {/* Need to actually manually set width and height here. If you don't,
-              the width will be alittle off. */}
+              the width will be a little off. */}
         <BarCodeScanner 
           style={{width : this.state.layout['width'], height : this.state.layout['height']}}
           
@@ -82,6 +82,21 @@ export default class Scanner extends React.Component {
             }
           }
         />
+        
+        <View style={styles.topOverlay} />
+        <View style={styles.leftOverlay} />
+        <View style={styles.rightOverlay} />
+        <View style={styles.bottomOverlay} />
+        <View style={styles.topLeftCorner} />
+        <View style={styles.topRightCorner} />
+        <View style={styles.bottomLeftCorner} />
+        <View style={styles.bottomRightCorner} />
+        <View style={styles.header}>
+          <Text style={styles.headerText}>
+            Scan A Book
+          </Text>
+        </View>
+
         <View style={styles.buttonContainer}>
           <LinkTouchableOpacity
             title = "Go To Your Items"
@@ -101,13 +116,28 @@ export default class Scanner extends React.Component {
 }
 
 
+const BOX_MARGIN = 30;
+const BOX_SIZE = Dimensions.get('window').width - BOX_MARGIN * 2;
+const BOX_TOP = Dimensions.get('window').height / 2 - BOX_SIZE / 2;
+const BOX_BOTTOM = BOX_TOP + BOX_SIZE;
+const BOX_LEFT = BOX_MARGIN;
+const BOX_RIGHT = Dimensions.get('window').width - BOX_MARGIN;
+
+const overlayBaseStyle = {
+  position: 'absolute',
+  backgroundColor: 'rgba(0,0,0,0.5)',
+};
+
+const cornerBaseStyle = {
+  position: 'absolute',
+  borderColor: '#fff',
+  backgroundColor: 'transparent',
+  borderWidth: 2,
+  width: 10,
+  height: 10,
+};
+
 const styles = StyleSheet.create({
-  // container: {
-  //   flex: 1,
-  //   backgroundColor: '#fff',
-  //   alignItems: 'center',
-  //   // justifyContent: 'center',
-  // },
   buttonContainer : {
     position: 'absolute',
     flexDirection: 'row',
@@ -120,7 +150,80 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
   }, 
 
-
+  container: {
+    flex: 1,
+  },
+  topLeftCorner: {
+    ...cornerBaseStyle,
+    top: BOX_TOP - 1,
+    left: BOX_MARGIN - 1,
+    borderBottomWidth: 0,
+    borderRightWidth: 0,
+  },
+  topRightCorner: {
+    ...cornerBaseStyle,
+    top: BOX_TOP - 1,
+    right: BOX_MARGIN - 1,
+    borderBottomWidth: 0,
+    borderLeftWidth: 0,
+  },
+  bottomLeftCorner: {
+    ...cornerBaseStyle,
+    bottom: Dimensions.get('window').height - BOX_BOTTOM - 1,
+    left: BOX_MARGIN - 1,
+    borderTopWidth: 0,
+    borderRightWidth: 0,
+  },
+  bottomRightCorner: {
+    ...cornerBaseStyle,
+    bottom: Dimensions.get('window').height - BOX_BOTTOM - 1,
+    right: BOX_MARGIN - 1,
+    borderTopWidth: 0,
+    borderLeftWidth: 0,
+  },
+  topOverlay: {
+    ...overlayBaseStyle,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: Dimensions.get('window').height - BOX_TOP,
+  },
+  leftOverlay: {
+    ...overlayBaseStyle,
+    top: BOX_TOP,
+    left: 0,
+    right: BOX_RIGHT,
+    bottom: Dimensions.get('window').height - BOX_BOTTOM,
+  },
+  rightOverlay: {
+    ...overlayBaseStyle,
+    top: BOX_TOP,
+    left: BOX_RIGHT,
+    right: 0,
+    bottom: Dimensions.get('window').height - BOX_BOTTOM,
+  },
+  bottomOverlay: {
+    ...overlayBaseStyle,
+    top: BOX_BOTTOM,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  header: {
+    position: 'absolute',
+    top: 40,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    left: 0,
+  },
+  headerText: {
+    color: '#fff',
+    backgroundColor: 'transparent',
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: '500',
+  },
 });
 
 
