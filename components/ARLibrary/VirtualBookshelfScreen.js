@@ -20,7 +20,9 @@ export default class VirtualBookshelfScreen extends React.Component {
     this.putBooksOnShelf = putBooksOnShelf.bind(this)
   }
 
-  componentWillMount() {
+  componentWillMount() { 
+    // none of this gets used, but this could potentially be the key to changing 
+    // what is rendered. 
     this.touching = false;
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
@@ -57,43 +59,15 @@ export default class VirtualBookshelfScreen extends React.Component {
     await this.putBooksOnShelf(scene, gl, renderer, camera, uid, this.bookOnShelfCreator, this.shelfCreator)
   }
 
-  _onGLBookViewContextCreate = async (gl) => {
-    const width = gl.drawingBufferWidth;
-    const height = gl.drawingBufferHeight;
-
-    const arSession = await this._glView.startARSessionAsync();
-
-    const scene = new THREE.Scene();
-    const camera = ExpoTHREE.createARCamera(arSession, width, height, 0.01, 1000);
-    const renderer = ExpoTHREE.createRenderer({ gl });
-    renderer.setSize(width, height);
-
-    scene.background = ExpoTHREE.createARBackgroundTexture(arSession, renderer);
-
-    // this is where the items get added. 
-    let uid = this.props.userObj.uid
-
-    // await this.putBooksOnShelf(scene, gl, renderer, camera, uid, this.bookOnShelfCreator, this.shelfCreator)
-
-  }
-
   render() {
     console.log('this.state.touching', this.state.touching)
-    return this.state.touching 
-    ? (  
-        <Expo.GLView
-          {...this.panResponder.panHandlers}
-          ref={(ref) => this._glView = ref}
-          style={{ flex: 1 }}
-          onContextCreate={this._onGLBookViewContextCreate}
-        />
-      ) 
-    : ( <Expo.GLView
-          {...this.panResponder.panHandlers}
-          ref={(ref) => this._glView = ref}
-          style={{ flex: 1 }}
-          onContextCreate={this._onGLBookShelfContextCreate}
-        />
+    return ( 
+      <Expo.GLView
+        {...this.panResponder.panHandlers}
+        ref={(ref) => this._glView = ref}
+        style={{ flex: 1 }}
+        onContextCreate={this._onGLBookShelfContextCreate}
+      />  
     );
   }
 

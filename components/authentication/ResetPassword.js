@@ -2,9 +2,11 @@ import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import firebase from 'firebase'
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
+import { herokuUrl, localhost } from '../../config/serverConfig.js'
 import { firebaseAuth, users} from '../../config/firebase/firebaseCredentials';
 import { provider } from '../../config/firebase/firebaseAuthCredentials';
 import LinkButton from '../helperComponents/LinkButton'
+import axios from 'axios'
 
 export default class ResetPassword extends React.Component {
   constructor() {
@@ -17,13 +19,15 @@ export default class ResetPassword extends React.Component {
   }
 
   resetPassword(e) {
-    // TODO: need to move this to the express server. 
     e.preventDefault(); 
-    firebaseAuth().sendPasswordResetEmail(this.state.email.value)
-      .then(() => this.setState({error : 
-        `Password reset email sent to ${this.state.email.value}.`}))
-      .catch(() => this.setState({error : 
-        `Email Address ${this.state.email.value} not found`}))
+    // replace with localhost or herokuUrl to run on heroku or locally. 
+    axios.post(`https://floating-eyrie-29015.herokuapp.com/auth/login/email/reset`, {
+      "email" : this.state.email, 
+    })
+    .then(res => this.setState({error: res.data.error} ))
+    .catch(error => {
+      console.error(`responded with a ${error} error`)
+    })
   }
 
   render() {
@@ -34,7 +38,7 @@ export default class ResetPassword extends React.Component {
           keyboardType={'email-address'}
           autoFocus={true}
           autoCorrect={false}
-          OnChangeText={(email) => this.state.email = email} 
+          onChangeText={(text) => this.state.email = text} 
           placeholder="Enter Your Email To Reset Password"
         />
 
