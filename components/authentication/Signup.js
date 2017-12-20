@@ -33,7 +33,7 @@ export default class Signup extends React.Component {
           let pw = emailSignInPass; 
           this.setState({ email }, () => {
             this.setState({ pw }, () => {
-              this.handleEmailSubmit() 
+              this.handleEmailSubmit(e, true) 
             })
           })
           return result.accessToken;
@@ -49,7 +49,7 @@ export default class Signup extends React.Component {
   }
 
 
-  handleEmailSubmit(e) {
+  handleEmailSubmit(e, createdWithOAuth) {
     // console.log('the handleEmailSubmit is running')
     e ? e.preventDefault() : null
     // replace with localhost or herokuUrl to run on heroku or locally. 
@@ -60,10 +60,12 @@ export default class Signup extends React.Component {
     .then(res => {
       if (res.data.error) { this.setState({error : res.data.error}) }
       else {
-        let userObj = res.data
+        let userObj = res.data.currentUser
+        userObj['createdWithOAuth'] = createdWithOAuth ? createdWithOAuth : false
         // this is sent down from app through authScreen. It sets state in App, 
         // which in turn calls checkAuthStatus from authHelpers. 
-        this.props.sendUserInfoToApp(userObj.currentUser)
+
+        this.props.sendUserInfoToApp(userObj)
       }
     }) 
   }  

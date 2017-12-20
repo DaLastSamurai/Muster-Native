@@ -21,8 +21,9 @@ export default class LinkButton extends React.Component {
    return (
 
       <Button 
+        style={this.props.style || null}
+        loading={this.props.loading}
         type={this.props.type || "button"} 
-        className="btn btn-outline-secondary bg-primary" 
         onPress={this.handlePress}
         title={this.props.title}
       />
@@ -32,10 +33,10 @@ export default class LinkButton extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  // container: {
-  //   flex: 1,
-  //   backgroundColor: '#fff',
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  // },
+  defaultStyle: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

@@ -6,7 +6,7 @@ import firebase from 'firebase'
 // it should only update if authed === false. 
 
 export const checkAuthStatus = function(userObj) {
-  console.log('checkAuthStatus called!')
+  console.log('checkAuthStatus called!', userObj)
   if (userObj) {
     this.setState({
       authed: true,
@@ -18,6 +18,7 @@ export const checkAuthStatus = function(userObj) {
         if (!snapshot.val()) { 
           // set defaults:
           let basicInfo = {
+            createdWithOAuth: userObj.createdWithOAuth, 
             email: userObj.email, 
             isPaiduser: false, 
           }

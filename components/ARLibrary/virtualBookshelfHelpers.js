@@ -20,7 +20,7 @@ export const bookOnShelfCreator = async (scene, dimensions, maxBookHeight, cover
   book.position.x = xPos
   book.position.y = (height/2) - ((maxBookHeight * 0.01)/2)
   book.position.z = -.3
-  scene.add(book); 
+  scene.add(book)
 }
 
 export const shelfCreator = async (scene, dimensions, anchor) => {
