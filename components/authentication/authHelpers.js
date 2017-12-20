@@ -6,7 +6,7 @@ import firebase from 'firebase'
 // it should only update if authed === false. 
 
 export const checkAuthStatus = function(userObj) {
-  console.log('checkAuthStatus called!', userObj)
+  console.log('checkAuthStatus called!')
   if (userObj) {
     this.setState({
       authed: true,

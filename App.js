@@ -52,7 +52,6 @@ export default class App extends React.Component {
               userObj = {JSON.parse(JSON.stringify(this.state.userObj))} 
               navigateToVirtualBookshelf = {this.navigateToVirtualBookshelf}
             />
-            
           : <AuthScreen 
               isSigningUp = {false} 
               sendUserInfoToApp = {this.getUserInfoFromAuth}
