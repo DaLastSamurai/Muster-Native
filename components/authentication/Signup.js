@@ -1,6 +1,6 @@
 import Expo from 'expo';
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, Dimensions, Keyboard } from 'react-native';
 import firebase from 'firebase'
 import axios from 'axios'
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
@@ -44,7 +44,6 @@ export default class Signup extends React.Component {
         return {error: true};
       }
     }
-    
     this._signUpWithGoogle = this._signUpWithGoogle.bind(this)
   }
 
@@ -73,32 +72,50 @@ export default class Signup extends React.Component {
 
   render() {
     return (
-      <View> 
+      <View style={styles.formContainer}> 
         {/* This is the google authentication: */}
         <LinkButton 
           title="Sign Up With Google"
           clickFunction={this._signUpWithGoogle}
         /> 
 
-        <Text style={styles.decisionText}> Or Sign Up With Email </Text> 
+        <Text style={{
+          padding: 20, 
+          color: 'white', 
+          fontSize: 20, 
+          textAlign: 'center', 
+        }}>
+            -or-
+        </Text> 
         {/* This is the email auth*/}
         <FormInput 
-          style={styles.email}
+          style={styles.textInput}
           autoCapitalize={"none"}
           keyboardType={'email-address'}
-          autoFocus={true}
+          // autoFocus={true}
           autoCorrect={false}
           onChangeText={(text) => this.state.email = text} 
           placeholder="Email Address"
-          // placeholderTextColor="white"
+          placeholderTextColor="#b2b1b0"
+          inputStyle={{
+            color: 'white', 
+            textAlign: 'center'
+          }}
+
         />
 
-        <FormInput 
+        <FormInput
+          style={styles.textInput} 
           autoCapitalize={"none"}
           autoCorrect={false}
           secureTextEntry={true}
           placeholder="Password" 
-          onChangeText={(pw) => this.state.pw = pw} 
+          onChangeText={(pw) => this.state.pw = pw}
+          placeholderTextColor="#b2b1b0" 
+          inputStyle={{
+            color: 'white', 
+            textAlign: 'center'
+          }}
         />
 
         <LinkButton 
@@ -106,21 +123,40 @@ export default class Signup extends React.Component {
           clickFunction={this.handleEmailSubmit} 
         />
 
-        <Text> {this.state.error} </Text>  
-
-        <LinkButton 
-          title='Login Page' 
-          clickFunction={this.props.loadLoginPage}
-        />
+        <Text style={{
+          padding: 20, 
+          color: 'red', 
+          fontSize: 15, 
+          textAlign: 'center', 
+        }}> 
+          {this.state.error} 
+        </Text>  
+        <View style={{
+            position: 'absolute', 
+            bottom: 10, 
+            left: Dimensions.get('window').width/2
+        }}> 
+          <LinkButton 
+            title='Login Page' 
+            clickFunction={this.props.loadLoginPage}
+          />
+        </View> 
       </View> 
     )
   }
 }
 
 const styles = StyleSheet.create({
-  email: {
-    color: '#000000', 
-    justifyContent: 'center',
+  formContainer : {
+    flex : 1, 
+    padding : 30, 
+  }, 
+  textInput: {
+    color: 'white', 
+    fontSize: 20, 
+    height: 80,
+    fontSize: 20,
+    borderRadius: 20, 
   },
   decisionText: {
     // flex: 1,

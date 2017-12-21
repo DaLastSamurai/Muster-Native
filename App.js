@@ -54,7 +54,6 @@ export default class App extends React.Component {
   }
 
   navigateToScanScreen(e, component) {
-    console.log('this is the component that got passed into the navigateToScanScreen: ', component)
     // this function gets passed to VirtualBookShelfScreen. The second argument
     // defines which component on the ScanScreen the User wants to navigate to. 
     this.setState({virtualBookshelfLoaded : false}, () => {
@@ -71,8 +70,6 @@ export default class App extends React.Component {
 
 
   render() {
-    console.log('the manual screen will be loaded: ', this.state.manualScreenLoaded)
-    console.log('this.state.authed', this.state.authed)
     return this.state.authed && this.state.virtualBookshelfLoaded ? (
       <VirtualBookshelfScreen 
         userObj = {JSON.parse(JSON.stringify(this.state.userObj))}

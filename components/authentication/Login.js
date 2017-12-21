@@ -1,6 +1,6 @@
 import Expo from 'expo'
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, Dimensions, Keyboard } from 'react-native';
 import firebase from 'firebase'
 import axios from 'axios'
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
@@ -76,54 +76,113 @@ export default class Login extends React.Component {
   render() {
     return (
       <View> 
-        <Text>     </Text> 
-        
-        {/* This is the google authentication: */}
-        <LinkButton 
-          title='Login With Google' 
-          clickFunction={this._signInWithGoogle} 
-        />
+        <View style={{
+          position: 'absolute', 
+          backgroundColor: 'rgba(0,0,0,0.1)'
+        }} /> 
+        <View style={styles.formContainer}> 
+          <Text>     </Text> 
+          
+          {/* This is the google authentication: */}
 
-        {/* This is the email auth*/}
+          <LinkButton 
+            title='Login With Google' 
+            clickFunction={this._signInWithGoogle} 
+          />
 
-        <FormInput 
-          style={styles.email}
-          autoCapitalize={"none"}
-          keyboardType={'email-address'}
-          autoFocus={true}
-          autoCorrect={false}
-          onChangeText={(text) => this.state.email = text} 
-          placeholder="Email Address"
-          // placeholderTextColor="white"
-        />
+          <Text style={{
+           padding: 20, 
+           color: 'white', 
+           fontSize: 20, 
+           textAlign: 'center', 
+          }}>
+            -or-
+          </Text> 
 
-        <FormInput 
-          autoCapitalize={"none"}
-          autoCorrect={false}
-          secureTextEntry={true}
-          placeholder="Password" 
-          onChangeText={(pw) => this.state.pw = pw} 
-        />
+          {/* This is the email auth*/}
+          
+            <FormInput 
+              style={styles.textInput}
+              autoCapitalize={"none"}
+              keyboardType={'email-address'}
+              // autoFocus={true}
+              autoCorrect={false}
+              onChangeText={(text) => this.state.email = text} 
+              placeholderTextColor="#b2b1b0"
+              placeholder="Email Address"
+              inputStyle={{
+                color: 'white', 
+                textAlign: 'center'
+              }}
+            />
 
-        <LinkButton 
-          title='Login' 
-          clickFunction={this.handleEmailSubmit} 
-        />
-        <Text> {this.state.error} </Text> 
-        
-        {!this.state.resettingPW 
-          ? (<LinkButton title='Reset Password' clickFunction={() => { this.setState({resettingPW : true}) } }/>)
-          : (<ResetPassword />)
-        }
-        <LinkButton title='Signup Page' clickFunction={this.props.loadSignupPage}/>
-      </View> 
+            <FormInput 
+              style={styles.textInput}
+              autoCapitalize={"none"}
+              autoCorrect={false}
+              secureTextEntry={true}
+              placeholder="Password" 
+              placeholderTextColor="#b2b1b0"
+              onChangeText={(pw) => this.state.pw = pw} 
+              inputStyle={{
+                color: 'white', 
+                textAlign: 'center'
+              }}
+            />
+
+            <LinkButton 
+              title='Login With Email' 
+              clickFunction={this.handleEmailSubmit} 
+            />
+
+            <Text style={{
+              padding: 20, 
+              color: 'red', 
+              fontSize: 15, 
+              textAlign: 'center', 
+            }}> 
+              {this.state.error} 
+            </Text> 
+            
+            {!this.state.resettingPW 
+              ? (<LinkButton title='Reset Password' clickFunction={() => { this.setState({resettingPW : true}) } }/>)
+              : (<ResetPassword />)
+            }
+
+          <View style={{
+            position: 'absolute', 
+            bottom: 10, 
+            left: Dimensions.get('window').width/2
+          }}> 
+            <LinkButton 
+              title='Signup Page' 
+              clickFunction={this.props.loadSignupPage}
+            />
+          </View> 
+        </View> 
+      </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  email: {
-    color: '#000000', 
+  formContainer : {
+    flex : 1, 
+    padding : 30, 
+  }, 
+  textInputContainer: {
+    height: 160,
+    width: (Dimensions.get('window').width * .68),
+    alignItems: 'center',
     justifyContent: 'center',
   },
+
+  textInput: {
+    color: 'white', 
+    fontSize: 20, 
+    height: 80,
+    fontSize: 20,
+    borderRadius: 20, 
+  },
+
 });
