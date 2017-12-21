@@ -6,7 +6,6 @@ import ExpoTHREE from 'expo-three'; // 2.0.2
 
 export const bookOnShelfCreator = async (scene, dimensions, maxBookHeight, coverUrl, pagesUrl, xPos) => {
   // TODO: change all of these args to a config. 
-  console.log('this gets run')
   let length = dimensions[0] * .01
   let height = dimensions[1] * .01
   let width = dimensions[2] * .01

@@ -1,7 +1,8 @@
 import Expo from 'expo';
 import React from 'react';
 import firebase from 'firebase'
-import { PanResponder, Text} from 'react-native'
+import { PanResponder, Text, View, StyleSheet} from 'react-native'
+import LinkTouchableOpacity from '../helperComponents/LinkTouchableOpacity'
 import * as THREE from 'three'; // 0.87.1
 import ExpoTHREE from 'expo-three'; // 2.0.2
 import { bookOnShelfCreator, shelfCreator, putBooksOnShelf } from './virtualBookshelfHelpers' 
@@ -60,15 +61,44 @@ export default class VirtualBookshelfScreen extends React.Component {
   }
 
   render() {
-    console.log('this.state.touching', this.state.touching)
+    // console.log('this.state.touching', this.state.touching)
     return ( 
-      <Expo.GLView
-        {...this.panResponder.panHandlers}
-        ref={(ref) => this._glView = ref}
-        style={{ flex: 1 }}
-        onContextCreate={this._onGLBookShelfContextCreate}
-      />  
+      <View style={{ flex: 1 }}> 
+        <Expo.GLView
+          {...this.panResponder.panHandlers}
+          ref={(ref) => this._glView = ref}
+          style={{ flex: 1 }}
+          onContextCreate={this._onGLBookShelfContextCreate}
+        /> 
+        <View style={styles.buttonContainer}>
+          <LinkTouchableOpacity
+            title = "Go To Your Items"
+            clickFunction = {() => this.props.navigateToScanScreen(null, 'ManualScreen')}
+          /> 
+          <Text style = {{ color: 'white', fontSize: 20, textAlign: 'center' }}> 
+            |
+          </Text> 
+          <LinkTouchableOpacity
+            title = "Go To Book Scanner"
+            clickFunction = {() => {this.props.navigateToScanScreen(null, 'Scanner')}}
+          />
+        </View>  
+      </View> 
     );
   }
-
 }
+
+const styles = StyleSheet.create({
+  buttonContainer : {
+    position: 'absolute',
+    flexDirection: 'row',
+    bottom: 8,
+    left: 8,
+    right: 8,
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    borderRadius: 4,
+    borderColor: 'white',
+    borderWidth: StyleSheet.hairlineWidth,
+  }, 
+})
+
