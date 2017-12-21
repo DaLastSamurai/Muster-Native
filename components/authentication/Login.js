@@ -52,7 +52,7 @@ export default class Login extends React.Component {
 
 
   handleEmailSubmit(e, createdWithOAuth) {
-    e ? e.preventDefault() : null ; 
+    // e ? e.preventDefault() : null ; 
     // replace with localhost or herokuUrl to run on heroku or locally. 
     axios.post(`${herokuUrl}/auth/login/email`, {
       "username" : this.state.email, 

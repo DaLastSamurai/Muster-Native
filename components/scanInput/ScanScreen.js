@@ -11,13 +11,17 @@ export default class ScanScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      manualScreenLoaded: true,
+      manualScreenLoaded: false,
       itemData: {}, // this is the object that comes from the scanner.
       sendingFromButton: false,
     };
     this.passItemDataToScanScreen = this.passItemDataToScanScreen.bind(this)
     this.toggleManualScreenLoaded = this.toggleManualScreenLoaded.bind(this)
     this.navigateToYourItems = this.navigateToYourItems.bind(this)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({manualScreenLoaded : nextProps.manualScreenLoaded})
   }
 
   passItemDataToScanScreen(itemData) { this.setState({ itemData }) }
@@ -30,7 +34,7 @@ export default class ScanScreen extends React.Component {
   }
 
   render() {
-    return this.state.manualScreenLoaded 
+    return this.state.manualScreenLoaded
     ? ( 
       <View style={{ flex: 1 }}> 
         {/* The new line is there purely for styling. */}

@@ -20,7 +20,7 @@ export default class Scanner extends React.Component {
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({hasCameraPermission: status === 'granted'});
-    const layout = window.layout = {
+    const layout = {
           width : Dimensions.get('window').width, 
           height : Dimensions.get('window').height
     }
@@ -58,7 +58,6 @@ export default class Scanner extends React.Component {
   }
 
   render() {
-    console.log('this is the layout: ', window.layout)
     return this.state.hasCameraPermission === null || this.state.layout === null
     ? (<View> 
         <Text>Requesting camera permission. </Text> 
@@ -82,7 +81,7 @@ export default class Scanner extends React.Component {
             }
           }
         />
-        
+        {/* This is all just for the overlay */}
         <View style={styles.topOverlay} />
         <View style={styles.leftOverlay} />
         <View style={styles.rightOverlay} />
@@ -91,9 +90,10 @@ export default class Scanner extends React.Component {
         <View style={styles.topRightCorner} />
         <View style={styles.bottomLeftCorner} />
         <View style={styles.bottomRightCorner} />
+        
         <View style={styles.header}>
           <Text style={styles.headerText}>
-            Scan A Book
+            Scan as Book Barcode
           </Text>
         </View>
 
@@ -225,14 +225,3 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
-
-
-
-
-
-
-
-
-
-
-
