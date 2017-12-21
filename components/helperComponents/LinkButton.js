@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableHighlight, TouchableOpacity, Text } from 'react-native';
 import { Button } from 'react-native-elements'
 // generic component for link buttons. Used multple times, very straightforward.
 // takes an optional argument for type. 
@@ -20,13 +20,19 @@ export default class LinkButton extends React.Component {
     // console.log('these are the props in the LinkButton: ', this.props)
    return (
 
-      <Button 
-        style={this.props.style || null}
-        loading={this.props.loading}
-        type={this.props.type || "button"} 
+      <TouchableOpacity 
+        style={styles.defaultStyle}
         onPress={this.handlePress}
-        title={this.props.title}
-      />
+      >
+        <Text style={{
+         color: 'white', 
+         fontSize: 20, 
+         textAlign: 'center', 
+
+        }}> 
+            {this.props.title} 
+        </Text> 
+      </TouchableOpacity> 
 
     )
   }
@@ -34,9 +40,7 @@ export default class LinkButton extends React.Component {
 
 const styles = StyleSheet.create({
   defaultStyle: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    // flex: 1, 
+    padding: 2, 
   },
 });

@@ -93,7 +93,7 @@ export default class Scanner extends React.Component {
         
         <View style={styles.header}>
           <Text style={styles.headerText}>
-            Scan as Book Barcode
+            Scan a Book Barcode
           </Text>
         </View>
 

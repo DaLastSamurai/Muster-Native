@@ -75,10 +75,20 @@ export default class ManualScreen extends React.Component {
           uid = {this.props.userObj.uid}
           toggleManualScreenLoaded = {this.props.toggleManualScreenLoaded}
         /> 
-        <LinkButton
-          title='Scan Another Item' 
-          clickFunction={() => {this.props.toggleManualScreenLoaded(false)} } 
-        /> 
+        <View style={styles.buttonContainer}>
+          <LinkTouchableOpacity
+            title = "Go To Virtual Bookshelf"
+            clickFunction = {() => this.props.navigateToScanScreen(null, 'ManualScreen')}
+          /> 
+          <Text style = {{ color: 'white', fontSize: 20, textAlign: 'center' }}> 
+            |
+          </Text> 
+          <LinkTouchableOpacity
+            title = "Go To Book Scanner"
+            clickFunction = {() => {this.props.navigateToScanScreen(null, 'Scanner')}}
+          />
+        </View>  
+
       </View>
     )
   }

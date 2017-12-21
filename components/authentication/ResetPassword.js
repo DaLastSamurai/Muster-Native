@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, Keyboard } from 'react-native';
 import firebase from 'firebase'
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 import { herokuUrl, localhost } from '../../config/serverConfig.js'
@@ -40,13 +40,25 @@ export default class ResetPassword extends React.Component {
           autoCorrect={false}
           onChangeText={(text) => this.state.email = text} 
           placeholder="Enter Your Email To Reset Password"
+          placeholderTextColor="#b2b1b0"
+          inputStyle={{
+            color: 'white', 
+            textAlign: 'center'
+          }}
         />
 
         <LinkButton
           title="Send Me Reset Password Instructions"
           clickFunction={this.resetPassword} 
         /> 
-        <Text> {this.state.error} </Text> 
+        <Text style={{
+          padding: 20, 
+          color: 'red', 
+          fontSize: 15, 
+          textAlign: 'center', 
+        }}> 
+          {this.state.error} 
+        </Text>  
       </View> 
     )
   }
