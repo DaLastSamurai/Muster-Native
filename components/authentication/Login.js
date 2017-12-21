@@ -11,7 +11,6 @@ import { iosClientId, emailSignInPass } from '../../config/firebase/loginWithGoo
 import LinkButton from '../helperComponents/LinkButton'
 import ResetPassword from './ResetPassword'
 
-
 export default class Login extends React.Component {
   constructor(props) {
     super(props);

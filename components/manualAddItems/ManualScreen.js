@@ -1,8 +1,8 @@
 import React from 'react';
 import { Constants, Location, Permissions } from 'expo';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import firebase from 'firebase'
-import LinkButton from '../helperComponents/LinkButton'
+import LinkTouchableOpacity from '../helperComponents/LinkTouchableOpacity'
 import CarouselInputFields from './CarouselInputFields'
 // this component takes props from ScanScreen and sets state in ScanScreen to 
 // render this screen or the Scanner. 
@@ -63,32 +63,21 @@ export default class ManualScreen extends React.Component {
     } else {_geoloc['error'] = location}
     parsedObj['_geoloc'] = _geoloc
 
-    console.log('this is what leaves parsedObj', parsedObj)
+    // console.log('this is what leaves parsedObj', parsedObj)
 
-    firebase.database().ref(`items-scanned/${this.props.userObj.uid}`).push(parsedObj)
+    firebase.database().ref(`items-scanned/${this.props.userObj.uid}`)
+      .push(parsedObj)
   }
 
   render() {
+    console.log('this.props', this.props)
     return ( 
       <View>
         <CarouselInputFields 
           uid = {this.props.userObj.uid}
           toggleManualScreenLoaded = {this.props.toggleManualScreenLoaded}
-        /> 
-        <View style={styles.buttonContainer}>
-          <LinkTouchableOpacity
-            title = "Go To Virtual Bookshelf"
-            clickFunction = {() => this.props.navigateToScanScreen(null, 'ManualScreen')}
-          /> 
-          <Text style = {{ color: 'white', fontSize: 20, textAlign: 'center' }}> 
-            |
-          </Text> 
-          <LinkTouchableOpacity
-            title = "Go To Book Scanner"
-            clickFunction = {() => {this.props.navigateToScanScreen(null, 'Scanner')}}
-          />
-        </View>  
-
+          navigateToVirtualBookshelf = {this.props.navigateToVirtualBookshelf}
+        />  
       </View>
     )
   }

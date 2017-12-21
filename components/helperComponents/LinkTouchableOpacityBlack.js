@@ -19,22 +19,20 @@ export default class LinkTouchableOpacity extends React.Component {
   render() {
     // console.log('these are the props in the LinkButton: ', this.props)
    return (
-
-        <TouchableOpacity
-          style={{
-            flex: 1, 
-            padding: 5, 
-            justifyContent: 'center', 
-            alignItems: 'center', 
-          }}
-          loading={this.props.loading}
-          onPress={this.handlePress}  
-        >
-          <Text style={{ color: 'white', fontSize: 15, textAlign: 'center' }}> 
-            {this.props.title} 
-          </Text> 
-        </TouchableOpacity> 
-
+    <TouchableOpacity
+      style={{
+        flex: 1, 
+        padding: 5, 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+      }}
+      loading={this.props.loading}
+      onPress={this.handlePress}  
+    >
+      <Text style={{ color: 'black', fontSize: 15, textAlign: 'center' }}> 
+        {this.props.title} 
+      </Text> 
+    </TouchableOpacity> 
     )
   }
 }
@@ -42,7 +40,7 @@ export default class LinkTouchableOpacity extends React.Component {
 const styles = StyleSheet.create({
   defaultStyle: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#000',
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -99,7 +99,7 @@ export default class Scanner extends React.Component {
 
         <View style={styles.buttonContainer}>
           <LinkTouchableOpacity
-            title = "Go To Your Items"
+            title = "Go To Details Editor"
             clickFunction = {this.props.navigateToYourItems}
           /> 
           <Text style = {{ color: 'white', fontSize: 20, textAlign: 'center' }}> 

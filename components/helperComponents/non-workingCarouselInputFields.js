@@ -1,3 +1,8 @@
+// this is an overblown CarouselInputFields that has a lot of bugs. It does have
+// some important functionality though...
+
+
+
 import React from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, Container, PickerIOS } from 'react-native';
 import firebase from 'firebase'
@@ -12,19 +17,26 @@ export default class CarouselInputFields extends React.Component {
     super(props);
     this.state = {
       itemData: null, 
+      collections: 'not loaded', 
+      selectedCollection: null, 
       firstLoaded: false, // see renderFirst function. 
       fieldData: null, 
       fieldDataHash: null, 
     };
-
+    // first two called on componentDidMount
     this.getItemsScannedData = this.getItemsScannedData.bind(this)
+    this.getUserCollections = this.getUserCollections.bind(this)
     this.renderFirst = this.renderFirst.bind(this)
     this.renderInputFields = this.renderInputFields.bind(this)
     this.updateDatabase = this.updateDatabase.bind(this)
+
+    // this is added to this directly so that I could make it a async function.
+    this.saveItemToCollection = this.saveItemToCollection.bind(this)
   }
 
   componentWillMount() {
     this.getItemsScannedData(this.props.uid)
+    this.getUserCollections(this.props.uid)
   }
 
   getItemsScannedData(uid) { 
@@ -46,6 +58,51 @@ export default class CarouselInputFields extends React.Component {
       } else {
         this.setState({ itemData : [] })
       }
+    })
+  }
+
+  saveItemToCollection() {
+    // 1. add {itemKey : itemData} to item. 
+    // 2. add {itemKey : itemKey} to users/this.props.uid/itemIds
+    // 3. add {itemKey : itemData} to collection/${this.state.selectedCollection}
+    // 4. remove item at itemKey from items-scanned. 
+
+    console.log('saveItemToCollection running')
+    let itemKey = this.state.fieldDataHash
+    let itemData = this.state.fieldData
+    itemData['uid'] = this.props.uid
+
+    firebase.database().ref(`item/${itemKey}`).set(itemData, () => {
+      firebase.database().ref(`users/${this.props.uid}/itemIds/${itemKey}`)
+      .set(itemKey, () => {
+        firebase.database().ref(`collection/${this.state.selectedCollection.value}/itemId/${itemKey}`)
+        .set(itemKey, () => {
+          firebase.database().ref(`items-scanned`).child(this.props.uid)
+            .child(itemKey).remove()
+        })
+      })
+    })
+  }
+
+  getUserCollections(uid) {
+    firebase.database().ref(`users/${uid}/collectionIds`).on('value', snap => {
+      // if a user has collections, get them. 
+      if (snap.val() !== null) {
+        let collectionsObj = snap.val(); 
+        let keys = Object.keys(collectionsObj)
+        firebase.database().ref(`collection`).on('value', allCols => {
+          if (snap.val() !== null) {
+            let allCollections = allCols.val()
+            let collections = keys.map(colId => {
+              colObj = {}
+              colObj['value'] = colId 
+              colObj['name'] = allCollections[colId].name
+              return colObj
+              })
+            return this.setState({ collections })
+          }
+        })
+      } else { this.setState({ collections : null})}
     })
   }
 
@@ -76,8 +133,15 @@ export default class CarouselInputFields extends React.Component {
   updateDatabase(field) {
     let key = this.state.fieldDataHash
     let text = this.state.fieldData[field]
-    firebase.database().ref(`items-scanned/${this.props.uid}/${key}/${field}`)
-      .set(text)
+    // check to see if item still exists to prevent this from setting values when 
+    // you delete an item. If the item does not exist, don't update.  
+    firebase.database().ref(`items-scanned/${this.props.uid}/${key}`).on('value', snap => {
+      // console.log('this is the value of the snap: ', snap.val())
+      if (snap.val() !== null) {
+        firebase.database().ref(`items-scanned/${this.props.uid}/${key}/${field}`)
+          .set(text)
+      }
+    })
   }
 
   // this is used for the rendering of different items. 
@@ -141,7 +205,6 @@ export default class CarouselInputFields extends React.Component {
             
               <FormLabel>Title</FormLabel>
               <FormInput 
-                returnKeyType={'done'}
                 onChangeText = {text => this.updateState(text, 'title')}
                 onEndInput = {this.updateDatabase('title')}
                 placeholder = {'Title'}
@@ -150,7 +213,6 @@ export default class CarouselInputFields extends React.Component {
 
               <FormLabel>Subject</FormLabel>
               <FormInput 
-                returnKeyType={'done'}
                 onChangeText = {text => this.updateState(text, 'subject')}
                 onEndInput = {this.updateDatabase('subject')}
                 placeholder = {'Subject'}
@@ -159,7 +221,6 @@ export default class CarouselInputFields extends React.Component {
 
               <FormLabel>Price (Default is Best Online Price)</FormLabel>
               <FormInput 
-                returnKeyType={'done'}
                 onChangeText = {text => this.updateState(text, 'onlinePrice')}
                 onEndInput = {this.updateDatabase('onlinePrice')}
                 placeholder = {'Online Price'}
@@ -168,7 +229,6 @@ export default class CarouselInputFields extends React.Component {
 
               <FormLabel>Notes</FormLabel>
               <FormInput 
-                returnKeyType={'done'}
                 onChangeText = {text => this.updateState(text, 'notes')}
                 onEndInput = {this.updateDatabase('notes')}
                 placeholder = {'Notes'}
@@ -177,6 +237,43 @@ export default class CarouselInputFields extends React.Component {
                 multiline = {true} 
                 numberOfLines = {4000}
               /> 
+
+             {/* <View style={{flexDirection: 'row'}}>
+                <Select
+                  onSelect = {
+                    (value, name) => {
+                      let selectedCollection = {}
+                      selectedCollection['value'] = value; 
+                      selectedCollection['name'] = name; 
+                      this.setState({ selectedCollection }) 
+                    }
+                  }
+                  defaultText = {this.state.selectedCollection 
+                    ? this.state.selectedCollection.name 
+                    : "select a collection"}
+                  style = {{borderWidth : 1, borderColor : "green"}}
+                  // textStyle = {{}}
+                  backdropStyle  = {{backgroundColor : "#d3d5d6"}}
+                  optionListStyle = {{backgroundColor : "#F5FCFF"}}
+                >
+                  {this.state.collections
+                    .map(colEl => {
+                      return (
+                        <Option key = {colEl.value} value = {colEl.value}> 
+                          {colEl.name} 
+                        </Option>
+                        )
+                    })
+                  }
+                </Select>
+            
+                <LinkButton
+                  title='Save to Collection' 
+                  clickFunction={() => {this.saveItemToCollection()} } 
+                /> 
+              </View>
+            */}
+
 
               <Text> 
               {/* this is for the spacing at the end of the ScrollView */}
@@ -207,12 +304,15 @@ const styles = StyleSheet.create({
     width: itemWidth,
     height: itemHeight,
     paddingHorizontal: horizontalMargin
+    // other styles for the item container
   },
   slideInnerContainer: {
       width: slideWidth,
       flex: 1
+      // other styles for the inner container
   },
   image: {
+    // ...StyleSheet.absoluteFillObject,]
     borderRadius: entryBorderRadius,
     borderTopLeftRadius: entryBorderRadius,
     borderTopRightRadius: entryBorderRadius
@@ -221,5 +321,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: 'rgba(0,0,0,0.1)',
     borderRadius: 4,
+    // borderColor: 'black',
+    // borderWidth: StyleSheet.hairlineWidth,
   }, 
 })

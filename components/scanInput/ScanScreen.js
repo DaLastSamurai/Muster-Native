@@ -45,6 +45,7 @@ export default class ScanScreen extends React.Component {
           itemData = {this.state.itemData} 
           userObj = {this.props.userObj}
           toggleManualScreenLoaded = {this.toggleManualScreenLoaded}
+          navigateToVirtualBookshelf = {this.props.navigateToVirtualBookshelf}
         /> 
       </View>
     ) : (
