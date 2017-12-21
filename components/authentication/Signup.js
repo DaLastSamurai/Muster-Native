@@ -95,6 +95,9 @@ export default class Signup extends React.Component {
           // autoFocus={true}
           autoCorrect={false}
           onChangeText={(text) => this.state.email = text} 
+          returnKeyType={'done'}
+          onSubmitEditing={Keyboard.dismiss}
+          onScroll={Keyboard.dismiss}
           placeholder="Email Address"
           placeholderTextColor="#b2b1b0"
           inputStyle={{
@@ -111,6 +114,9 @@ export default class Signup extends React.Component {
           secureTextEntry={true}
           placeholder="Password" 
           onChangeText={(pw) => this.state.pw = pw}
+          returnKeyType={'done'}
+          onSubmitEditing={Keyboard.dismiss}
+          onScroll={Keyboard.dismiss}
           placeholderTextColor="#b2b1b0" 
           inputStyle={{
             color: 'white', 

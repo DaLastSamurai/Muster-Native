@@ -108,6 +108,9 @@ export default class Login extends React.Component {
               // autoFocus={true}
               autoCorrect={false}
               onChangeText={(text) => this.state.email = text} 
+              returnKeyType={'done'}
+              onSubmitEditing={Keyboard.dismiss}
+              onScroll={Keyboard.dismiss}
               placeholderTextColor="#b2b1b0"
               placeholder="Email Address"
               inputStyle={{
@@ -124,6 +127,9 @@ export default class Login extends React.Component {
               placeholder="Password" 
               placeholderTextColor="#b2b1b0"
               onChangeText={(pw) => this.state.pw = pw} 
+              returnKeyType={'done'}
+              onSubmitEditing={Keyboard.dismiss}
+              onScroll={Keyboard.dismiss}
               inputStyle={{
                 color: 'white', 
                 textAlign: 'center'
