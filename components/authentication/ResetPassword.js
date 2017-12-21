@@ -40,6 +40,9 @@ export default class ResetPassword extends React.Component {
           autoCorrect={false}
           onChangeText={(text) => this.state.email = text} 
           placeholder="Enter Your Email To Reset Password"
+          returnKeyType={'done'}
+          onSubmitEditing={Keyboard.dismiss}
+          onScroll={Keyboard.dismiss}
           placeholderTextColor="#b2b1b0"
           inputStyle={{
             color: 'white', 

@@ -41,11 +41,11 @@ export default class App extends React.Component {
     // only call the checkAuthStatus if a user is not authed. 
     if (!this.state.authed) {
       this.checkAuthStatus(this.state.userObj)
-      this.render() 
     }
     // calling render here makes sure that the app gets the updated user 
     // information. THIS MIGHT BECOME A PROBLEM WHEN COMPONENTS BELOW THE APP 
     // STARTS RERENDERING, triggering rerendering on app updates. 
+    this.render() 
   }
 
   getUserInfoFromAuth(userObj) { this.setState({userObj}) }

@@ -2,7 +2,7 @@ import Expo from 'expo';
 import React from 'react';
 import firebase from 'firebase'
 import { PanResponder, Text, View, StyleSheet} from 'react-native'
-import LinkTouchableOpacity from '../helperComponents/LinkTouchableOpacity'
+import LinkTouchableOpacityBlack from '../helperComponents/LinkTouchableOpacityBlack'
 import * as THREE from 'three'; // 0.87.1
 import ExpoTHREE from 'expo-three'; // 2.0.2
 import { bookOnShelfCreator, shelfCreator, putBooksOnShelf } from './virtualBookshelfHelpers' 
@@ -71,14 +71,14 @@ export default class VirtualBookshelfScreen extends React.Component {
           onContextCreate={this._onGLBookShelfContextCreate}
         /> 
         <View style={styles.buttonContainer}>
-          <LinkTouchableOpacity
-            title = "Go To Your Items"
+          <LinkTouchableOpacityBlack
+            title = "Go To Details Editor"
             clickFunction = {() => this.props.navigateToScanScreen(null, 'ManualScreen')}
           /> 
           <Text style = {{ color: 'white', fontSize: 20, textAlign: 'center' }}> 
             |
           </Text> 
-          <LinkTouchableOpacity
+          <LinkTouchableOpacityBlack
             title = "Go To Book Scanner"
             clickFunction = {() => {this.props.navigateToScanScreen(null, 'Scanner')}}
           />
