@@ -1,9 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, ImageBackground, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, Dimensions, Image } from 'react-native';
 import firebase from 'firebase'
 import { firebaseAuth, users} from '../../config/firebase/firebaseCredentials';
 
 import bookShelf from '../../assets/lights.jpg'
+
+
 import Signup from './Signup'
 import Login from './Login'
 
@@ -21,7 +23,6 @@ export default class AuthScreen extends React.Component {
     super(props);
     this.state = {
       isSigningUp: this.props.isSigningUp,// this will load the login page by default.
-      loading: false, 
     }; 
     this.loadSignupPage = this.loadSignupPage.bind(this); 
     this.loadLoginPage = this.loadLoginPage.bind(this);
@@ -33,13 +34,8 @@ export default class AuthScreen extends React.Component {
     this.setState({isSigningUp : this.props.isSigningUp})
   }
 
-  loadSignupPage() {
-    this.setState({isSigningUp: true})
-  }
-
-  loadLoginPage() {
-    this.setState({isSigningUp: false})
-  }
+  loadSignupPage() { this.setState({isSigningUp: true}) }
+  loadLoginPage() { this.setState({isSigningUp: false}) }
 
   render() {
     return (
@@ -50,23 +46,23 @@ export default class AuthScreen extends React.Component {
           style={styles.background}
         > 
         {this.state.isSigningUp 
-          ? (
-            <View style={{ flex: 1 }}> 
-              <Text>                  </Text> 
-              <Signup 
-                loadLoginPage = {this.loadLoginPage}
-                sendUserInfoToApp = {this.props.sendUserInfoToApp}
-              />
-            </View> 
-          ) : (
-            <View style={{ flex: 1 }}> 
-              <Login 
-                user = {this.props.user} 
-                loadSignupPage = {this.loadSignupPage}
-                sendUserInfoToApp = {this.props.sendUserInfoToApp}
-              />
-            </View> 
-          )
+            ? (
+              <View style={{ flex: 1 }}> 
+                <Text>                  </Text> 
+                <Signup 
+                  loadLoginPage = {this.loadLoginPage}
+                  sendUserInfoToApp = {this.props.sendUserInfoToApp}
+                />
+              </View> 
+            ) : (
+              <View style={{ flex: 1 }}> 
+                <Login 
+                  user = {this.props.user} 
+                  loadSignupPage = {this.loadSignupPage}
+                  sendUserInfoToApp = {this.props.sendUserInfoToApp}
+                />
+              </View> 
+            )
         }
       </ImageBackground> 
       </View> 

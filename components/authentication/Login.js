@@ -8,6 +8,8 @@ import { firebaseAuth, users} from '../../config/firebase/firebaseCredentials';
 
 import { herokuUrl, localhost } from '../../config/serverConfig.js'
 import { iosClientId, emailSignInPass } from '../../config/firebase/loginWithGoogleCredentials'
+
+import LoadingPage from '../helperComponents/LoadingPage'
 import LinkButton from '../helperComponents/LinkButton'
 import ResetPassword from './ResetPassword'
 
@@ -19,10 +21,13 @@ export default class Login extends React.Component {
       email : "", 
       pw : "", 
       resettingPW: false, 
+      loading: false
     }; 
     this.handleEmailSubmit = this.handleEmailSubmit.bind(this)
 
     this._signInWithGoogle = async (e) => {
+      // start by loading the loading page. 
+      this.loadLoadingPage()
       try {
         const result = await Expo.Google.logInAsync({
           iosClientId: iosClientId,
@@ -47,10 +52,14 @@ export default class Login extends React.Component {
     }
     
     this._signInWithGoogle = this._signInWithGoogle.bind(this)
+    this.loadLoadingPage = this.loadLoadingPage.bind(this)
   }
 
+  loadLoadingPage() { this.setState({loading : true}) }
 
   handleEmailSubmit(e, createdWithOAuth) {
+    // start by loading the loading page. 
+    this.loadLoadingPage()
     // e ? e.preventDefault() : null ; 
     // replace with localhost or herokuUrl to run on heroku or locally. 
     axios.post(`${herokuUrl}/auth/login/email`, {
@@ -73,8 +82,12 @@ export default class Login extends React.Component {
   }
 
   render() {
-    return (
-      <View> 
+    return (this.state.loading
+
+    ? ( 
+        <LoadingPage loadingText={"logging in..."}/>  
+      )
+    : <View> 
         <View style={{
           position: 'absolute', 
           backgroundColor: 'rgba(0,0,0,0.1)'

@@ -4,8 +4,10 @@ import firebase from 'firebase'
 import Carousel, { ParallaxImage } from 'react-native-snap-carousel'
 import { FormLabel, FormInput } from 'react-native-elements'
 import { Select, Option } from 'react-native-chooser';
+
 import LinkButton from '../helperComponents/LinkButton'
 import LinkTouchableOpacityBlack from '../helperComponents/LinkTouchableOpacityBlack'
+import LoadingPage from '../helperComponents/LoadingPage'
 
 export default class CarouselInputFields extends React.Component {
   constructor(props) {
@@ -99,7 +101,7 @@ export default class CarouselInputFields extends React.Component {
     // console.log('this.state.itemData: ', this.state.itemData, 'this.state.collections: ', this.state.collections)
     // waits to render carousel until itemData and collections is loaded. 
     return this.state.itemData === null 
-    ? <Text> Loading Your Items </Text> 
+    ? <LoadingPage loadingText={"Loading Your Items"} /> 
 
     : this.state.itemData.length > 0
     ? ( 

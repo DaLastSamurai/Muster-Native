@@ -11,13 +11,11 @@ export default class LinkTouchableOpacity extends React.Component {
 
   handlePress(e) {
     if(typeof this.props.clickFunction(e) !== 'undefined') {
-      // console.log('invoked this.props.clickFunction: ', this.props.clickFunction(e));
       this.props.clickFunction(e).then(data => data)
     }
   }
 
   render() {
-    // console.log('these are the props in the LinkButton: ', this.props)
    return (
     <TouchableOpacity
       style={{
@@ -29,7 +27,7 @@ export default class LinkTouchableOpacity extends React.Component {
       loading={this.props.loading}
       onPress={this.handlePress}  
     >
-      <Text style={{ color: 'white', fontSize: 15, textAlign: 'center' }}> 
+      <Text style={{ color: 'black', fontSize: 15, textAlign: 'center' }}> 
         {this.props.title} 
       </Text> 
     </TouchableOpacity> 
