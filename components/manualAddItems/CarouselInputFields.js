@@ -98,7 +98,7 @@ export default class CarouselInputFields extends React.Component {
   render() {
     // console.log('this.state.itemData: ', this.state.itemData, 'this.state.collections: ', this.state.collections)
     // waits to render carousel until itemData and collections is loaded. 
-    return this.state.itemData === null || this.state.collections === 'not loaded'
+    return this.state.itemData === null 
     ? <Text> Loading Your Items </Text> 
 
     : this.state.itemData.length > 0
@@ -190,7 +190,17 @@ export default class CarouselInputFields extends React.Component {
       </View>
     ) 
 
-    : <Text> You do not have any scanned items! </Text> 
+    : (
+      <View style = {{flex: 1, justifyContent: 'center'}}> 
+        <Text> You do not have any scanned items! </Text> 
+        <View style={styles.buttonContainer}>
+          <LinkTouchableOpacityBlack
+            title = "Scan A Book"
+            clickFunction = {() => {this.props.toggleManualScreenLoaded(false)}}
+          />
+        </View> 
+      </View> 
+      )
   }
 }
 
@@ -222,4 +232,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.1)',
     borderRadius: 4,
   }, 
+  emptyItemsButtonContainer : {
+    flexDirection: 'row',
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    borderRadius: 4,
+    height : 5
+  }
 })

@@ -59,9 +59,8 @@ export default class Scanner extends React.Component {
 
   render() {
     return this.state.hasCameraPermission === null || this.state.layout === null
-    ? (<View> 
+    ? (<View style = {{flex: 1, justifyContent: 'center'}}> 
         <Text>Requesting camera permission. </Text> 
-        <Text> If you have scanned several items, this may take a second. </Text>
       </View>)
     
     : this.state.hasCameraPermission === false || this.state.layout === null

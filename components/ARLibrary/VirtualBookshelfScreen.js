@@ -3,6 +3,7 @@ import React from 'react';
 import firebase from 'firebase'
 import { PanResponder, Text, View, StyleSheet} from 'react-native'
 import LinkTouchableOpacityBlack from '../helperComponents/LinkTouchableOpacityBlack'
+import LinkTouchableOpacity from '../helperComponents/LinkTouchableOpacity'
 import * as THREE from 'three'; // 0.87.1
 import ExpoTHREE from 'expo-three'; // 2.0.2
 import { bookOnShelfCreator, shelfCreator, putBooksOnShelf } from './virtualBookshelfHelpers' 
@@ -14,16 +15,19 @@ export default class VirtualBookshelfScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      touching : false
+      touching : false, 
+      noBookData : true
     };
+    this.checkForData = this.checkForData.bind(this)
     this.bookOnShelfCreator = bookOnShelfCreator.bind(this)
     this.shelfCreator = shelfCreator.bind(this)
     this.putBooksOnShelf = putBooksOnShelf.bind(this)
   }
 
-  componentWillMount() { 
+  componentDidMount() { 
     // none of this gets used, but this could potentially be the key to changing 
     // what is rendered. 
+    this.checkForData()
     this.touching = false;
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
@@ -39,6 +43,15 @@ export default class VirtualBookshelfScreen extends React.Component {
       },
       onShouldBlockNativeResponder: () => false,
     });
+  }
+
+  checkForData() {
+    console.log('this gets runnnsnsnns', this.props.userObj.uid)
+    let uid = this.props.userObj.uid; 
+    firebase.database().ref(`items-scanned/${uid}`).on('value', bookData => {
+      console.log('bookData.val()', bookData.val())
+      if (bookData.val() !== null) this.setState({noBookData : false})
+    })
   }
 
   _onGLBookShelfContextCreate = async (gl) => {
@@ -61,8 +74,19 @@ export default class VirtualBookshelfScreen extends React.Component {
   }
 
   render() {
-    // console.log('this.state.touching', this.state.touching)
-    return ( 
+    console.log('this.state.noBookData', this.state.noBookData)
+    return this.state.noBookData
+      ? (
+        <View style = {{flex: 1, justifyContent: 'center'}}> 
+          <Text> Scan an book to see your virtual bookshelf! </Text> 
+          <View style={styles.buttonContainer}>
+            <LinkTouchableOpacityBlack
+              title = "Scan A Book"
+              clickFunction = {() => this.props.navigateToScanScreen(null, 'ManualScreen')}
+            />
+          </View> 
+        </View> 
+      ) : ( 
       <View style={{ flex: 1 }}> 
         <Expo.GLView
           {...this.panResponder.panHandlers}

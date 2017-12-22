@@ -29,7 +29,7 @@ export default class LinkTouchableOpacity extends React.Component {
       loading={this.props.loading}
       onPress={this.handlePress}  
     >
-      <Text style={{ color: 'black', fontSize: 15, textAlign: 'center' }}> 
+      <Text style={{ color: 'white', fontSize: 15, textAlign: 'center' }}> 
         {this.props.title} 
       </Text> 
     </TouchableOpacity> 
