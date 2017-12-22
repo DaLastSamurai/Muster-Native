@@ -10,6 +10,8 @@ import { herokuUrl, localhost } from '../../config/serverConfig.js'
 import { iosClientId, emailSignInPass } from '../../config/firebase/loginWithGoogleCredentials'
 import LinkButton from '../helperComponents/LinkButton'
 
+console.disableYellowBox = true;
+
 export default class Signup extends React.Component {
   constructor() {
     super();

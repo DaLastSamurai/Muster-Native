@@ -3,6 +3,9 @@ import { StyleSheet, TouchableHighlight, TouchableOpacity, Text } from 'react-na
 import { Button } from 'react-native-elements'
 // generic component for link buttons. Used multple times, very straightforward.
 // takes an optional argument for type. 
+
+console.disableYellowBox = true;
+
 export default class LinkButton extends React.Component {
   constructor(props) {
     super(props);

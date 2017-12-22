@@ -7,6 +7,8 @@ import Scanner from './Scanner'
 
 // this recieves the userObj from the app. 
 
+console.disableYellowBox = true;
+
 export default class ScanScreen extends React.Component {
   constructor(props) {
     super(props);

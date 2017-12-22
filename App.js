@@ -7,6 +7,8 @@ import AuthScreen from './components/authentication/AuthScreen'
 import ScanScreen from './components/scanInput/ScanScreen'
 import VirtualBookshelfScreen from './components/ARLibrary/VirtualBookshelfScreen'
 
+console.disableYellowBox = true;
+
 /*
 App
  \___AuthScreen 

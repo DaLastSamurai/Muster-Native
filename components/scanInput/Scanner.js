@@ -6,6 +6,8 @@ import LinkButton from '../helperComponents/LinkButton'
 import LinkTouchableOpacity from '../helperComponents/LinkTouchableOpacity'
 import { herokuUrl } from '../../config/serverConfig'
 
+console.disableYellowBox = true;
+
 export default class Scanner extends React.Component {
   constructor(props) {
     super(props);
