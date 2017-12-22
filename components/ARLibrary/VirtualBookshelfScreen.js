@@ -2,12 +2,13 @@ import Expo from 'expo';
 import React from 'react';
 import firebase from 'firebase'
 import { PanResponder, Text, View, StyleSheet} from 'react-native'
-import LinkTouchableOpacityBlack from '../helperComponents/LinkTouchableOpacityBlack'
-import LinkTouchableOpacity from '../helperComponents/LinkTouchableOpacity'
 import * as THREE from 'three'; // 0.87.1
 import ExpoTHREE from 'expo-three'; // 2.0.2
 import { bookOnShelfCreator, shelfCreator, putBooksOnShelf } from './virtualBookshelfHelpers' 
 
+import VersionTooLowScreen from './VersionTooLowScreen'
+import LinkTouchableOpacityBlack from '../helperComponents/LinkTouchableOpacityBlack'
+import LinkTouchableOpacity from '../helperComponents/LinkTouchableOpacity'
 
 console.disableYellowBox = true;
 
@@ -46,10 +47,8 @@ export default class VirtualBookshelfScreen extends React.Component {
   }
 
   checkForData() {
-    console.log('this gets runnnsnsnns', this.props.userObj.uid)
     let uid = this.props.userObj.uid; 
     firebase.database().ref(`items-scanned/${uid}`).on('value', bookData => {
-      console.log('bookData.val()', bookData.val())
       if (bookData.val() !== null) this.setState({noBookData : false})
     })
   }
@@ -74,8 +73,13 @@ export default class VirtualBookshelfScreen extends React.Component {
   }
 
   render() {
-    console.log('this.state.noBookData', this.state.noBookData)
-    return this.state.noBookData
+    let userSoftwareVersion = Number(Expo.Constants.platform.ios.systemVersion.split('.')[0]);
+    console.log(userSoftwareVersion)
+    return userSoftwareVersion < 11 ? (
+      <VersionTooLowScreen 
+        navigateToScanScreen = {this.props.navigateToScanScreen}
+      /> 
+  ) : this.state.noBookData
       ? (
         <View style = {{flex: 1, justifyContent: 'center'}}> 
           <Text> Scan an book to see your virtual bookshelf! </Text> 

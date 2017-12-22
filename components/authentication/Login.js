@@ -84,11 +84,8 @@ export default class Login extends React.Component {
   }
 
   render() {
-    return (this.state.loading
-
-    ? ( 
-        <LoadingPage loadingText={"logging in..."}/>  
-      )
+    return (this.state.loading && !this.state.error
+    ? <LoadingPage loadingText={"logging in..."}/>  
     : <View> 
         <View style={{
           position: 'absolute', 

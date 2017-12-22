@@ -48,23 +48,23 @@ export default class AuthScreen extends React.Component {
           style={styles.background}
         > 
         {this.state.isSigningUp 
-            ? (
-              <View style={{ flex: 1 }}> 
-                <Text>                  </Text> 
-                <Signup 
-                  loadLoginPage = {this.loadLoginPage}
-                  sendUserInfoToApp = {this.props.sendUserInfoToApp}
-                />
-              </View> 
-            ) : (
-              <View style={{ flex: 1 }}> 
-                <Login 
-                  user = {this.props.user} 
-                  loadSignupPage = {this.loadSignupPage}
-                  sendUserInfoToApp = {this.props.sendUserInfoToApp}
-                />
-              </View> 
-            )
+          ? (
+            <View style={{ flex: 1 }}> 
+              <Text>                  </Text> 
+              <Signup 
+                loadLoginPage = {this.loadLoginPage}
+                sendUserInfoToApp = {this.props.sendUserInfoToApp}
+              />
+            </View> 
+          ) : (
+            <View style={{ flex: 1 }}> 
+              <Login 
+                user = {this.props.user} 
+                loadSignupPage = {this.loadSignupPage}
+                sendUserInfoToApp = {this.props.sendUserInfoToApp}
+              />
+            </View> 
+          )
         }
       </ImageBackground> 
       </View> 
