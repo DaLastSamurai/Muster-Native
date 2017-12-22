@@ -8,7 +8,9 @@ import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elemen
 import { firebaseAuth, users} from '../../config/firebase/firebaseCredentials';
 import { herokuUrl, localhost } from '../../config/serverConfig.js'
 import { iosClientId, emailSignInPass } from '../../config/firebase/loginWithGoogleCredentials'
+
 import LinkButton from '../helperComponents/LinkButton'
+import LoadingPage from '../helperComponents/LoadingPage'
 
 console.disableYellowBox = true;
 
@@ -21,9 +23,11 @@ export default class Signup extends React.Component {
       pw : "", 
     }; 
     this.handleEmailSubmit = this.handleEmailSubmit.bind(this)
+    this.loadLoadingPage = this.loadLoadingPage.bind(this)
     
     // this has to go in the constructor so that I can use async.
     this._signUpWithGoogle = async (e) => {
+      this.loadLoadingPage()
       try {
         const result = await Expo.Google.logInAsync({
           iosClientId: iosClientId,
@@ -51,8 +55,8 @@ export default class Signup extends React.Component {
 
 
   handleEmailSubmit(e, createdWithOAuth) {
-    // console.log('the handleEmailSubmit is running')
-    e ? e.preventDefault() : null
+    this.loadLoadingPage()
+    // e ? e.preventDefault() : null
     // replace with localhost or herokuUrl to run on heroku or locally. 
     axios.post(`${herokuUrl}/auth/signup/email`, {
       "username" : this.state.email, 
@@ -71,10 +75,12 @@ export default class Signup extends React.Component {
     }) 
   }  
 
+  loadLoadingPage() { this.setState({loading : true}) }
 
   render() {
-    return (
-      <View style={styles.formContainer}> 
+    return (this.state.loading && !this.state.error
+    ? <LoadingPage loadingText={"signing up..."}/>  
+    : <View style={styles.formContainer}> 
         {/* This is the google authentication: */}
         <LinkButton 
           title="Sign Up With Google"
