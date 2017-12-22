@@ -38,7 +38,6 @@ export default class ManualScreen extends React.Component {
   }
 
   parseItemData(data, location) {
-    console.log('this is what comes into parseItemData: ', data)
     // this takes data from this.props.itemData and looks up that item in the db.
     // this data is the same format as the addItems (web client). 
     let parsedObj = {}
@@ -63,14 +62,12 @@ export default class ManualScreen extends React.Component {
     } else {_geoloc['error'] = location}
     parsedObj['_geoloc'] = _geoloc
 
-    // console.log('this is what leaves parsedObj', parsedObj)
 
     firebase.database().ref(`items-scanned/${this.props.userObj.uid}`)
       .push(parsedObj)
   }
 
   render() {
-    console.log('this.props', this.props)
     return ( 
       <View>
         <CarouselInputFields 
