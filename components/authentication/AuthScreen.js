@@ -18,6 +18,8 @@ AuthScreen
          
 */
 
+console.disableYellowBox = true;
+
 export default class AuthScreen extends React.Component {
   constructor(props) {
     super(props);

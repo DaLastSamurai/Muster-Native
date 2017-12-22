@@ -7,6 +7,8 @@ import CarouselInputFields from './CarouselInputFields'
 // this component takes props from ScanScreen and sets state in ScanScreen to 
 // render this screen or the Scanner. 
 
+console.disableYellowBox = true;
+
 export default class ManualScreen extends React.Component {
   constructor(props) {
     super(props);

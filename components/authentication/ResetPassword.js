@@ -8,6 +8,8 @@ import { provider } from '../../config/firebase/firebaseAuthCredentials';
 import LinkButton from '../helperComponents/LinkButton'
 import axios from 'axios'
 
+console.disableYellowBox = true;
+
 export default class ResetPassword extends React.Component {
   constructor() {
     super();

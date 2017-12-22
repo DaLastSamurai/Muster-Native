@@ -13,6 +13,8 @@ import LoadingPage from '../helperComponents/LoadingPage'
 import LinkButton from '../helperComponents/LinkButton'
 import ResetPassword from './ResetPassword'
 
+console.disableYellowBox = true;
+
 export default class Login extends React.Component {
   constructor(props) {
     super(props);

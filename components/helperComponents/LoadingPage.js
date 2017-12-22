@@ -3,6 +3,8 @@ import { Image, PanResponder, View, Text } from 'react-native';
 
 import page from '../../assets/page.gif'
 
+console.disableYellowBox = true;
+
 export default class LoadingPage extends React.Component {
   constructor(props) {
     super(props);

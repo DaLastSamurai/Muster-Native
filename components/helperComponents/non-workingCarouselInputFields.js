@@ -1,7 +1,7 @@
 // this is an overblown CarouselInputFields that has a lot of bugs. It does have
 // some important functionality though...
 
-
+console.disableYellowBox = true;
 
 import React from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, Container, PickerIOS } from 'react-native';

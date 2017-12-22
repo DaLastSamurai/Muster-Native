@@ -9,6 +9,8 @@ import LinkButton from '../helperComponents/LinkButton'
 import LinkTouchableOpacityBlack from '../helperComponents/LinkTouchableOpacityBlack'
 import LoadingPage from '../helperComponents/LoadingPage'
 
+console.disableYellowBox = true;
+
 export default class CarouselInputFields extends React.Component {
   constructor(props) {
     super(props);
